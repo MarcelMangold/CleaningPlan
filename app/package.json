@@ -1,0 +1,25 @@
+{
+  "name": "cleaningplan",
+  "version": "1.0.0",
+  "description": "Creating and managing a cleaning plan for a shared flat.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MarcelMangold/CleaningPlan.git"
+  },
+  "keywords": [
+    "CleaningPlan",
+    "clean",
+    "shared",
+    "flat"
+  ],
+  "author": "Marcel Mangold",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MarcelMangold/CleaningPlan/issues"
+  },
+  "homepage": "https://github.com/MarcelMangold/CleaningPlan#readme"
+}
