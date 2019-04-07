@@ -12,44 +12,45 @@ function post(req, res, next) {
         database: CONFIG.db_name
     });
 
-        connection.connect();
-        var query = "SELECT `user_management`.`id`, `user_management`.`username`, `user_management`.`password`" + 
-                    "FROM `cleaningplandb`.`user_management`" + 
-                    " WHERE `username` ='" + req.body.name + "'";
+    connection.connect();
+    var query = "SELECT `user_management`.`id`, `user_management`.`username`, `user_management`.`password`" +
+        "FROM `cleaningplandb`.`user_management`" +
+        " WHERE `username` ='" + req.body.name + "'";
 
-        connection.query(query, function (err, results, fields) {
-            if (err)
-                console.error(err);
-                if(results.length == 0)
-                {
-                    res.status(401).send({message: 'Invalid user.'});
-                    return;
-                }
-                user = results[0];
-                connection.end();
-         
-                bcrypt.compare(req.body.password, user.password, function(err, pwMatch) {
-                    var payload;
-                    if (err) {
-                        return next(err);
-                    }
+    connection.query(query, function (err, results, fields) {
+        if (err)
+            console.error(err);
 
-                    if (!pwMatch) {
-                        res.status(401).send({message: 'Invalid email or password.'});
-                        return;
-                    }
+        if (results == undefined) {
+            res.status(401).send({ message: 'Invalid user.' });
+            return;
+        }
 
-                    payload = {
-                        sub: user.username,
-                        role: user.role
-                    };
+        user = results[0];
+        connection.end();
 
-                    res.status(200).json({
-                        user: user,
-                        token: jwt.sign(payload, CONFIG.jwt_encryption, CONFIG.signOptions)
-                    });
+        bcrypt.compare(req.body.password, user.password, function (err, pwMatch) {
+            var payload;
+            if (err) {
+                return next(err);
+            }
 
-      
+            if (!pwMatch) {
+                res.status(401).send({ message: 'Invalid email or password.' });
+                return;
+            }
+
+            payload = {
+                sub: user.username,
+                role: user.role
+            };
+
+            res.status(200).json({
+                user: user,
+                token: jwt.sign(payload, CONFIG.jwt_encryption, CONFIG.signOptions)
+            });
+
+
 
 
         });
