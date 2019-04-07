@@ -2,7 +2,7 @@ module.exports = {
 
     database: {
         user: 'user',
-        password: 'passwortDB',
+        password: 'passwortDBas',
         connectString: 'localhost:3306/cleaningplandb',
         databaseName: 'cleaningplandb'
     },
