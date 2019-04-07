@@ -13,9 +13,11 @@ function post(req, res, next) {
     });
 
     connection.connect();
+    console.log(req.body);
+
     var query = "SELECT `user_management`.`id`, `user_management`.`username`, `user_management`.`password`" +
         "FROM `cleaningplandb`.`user_management`" +
-        " WHERE `username` ='" + req.body.name + "'";
+        " WHERE `username` ='" + req.body.username + "'";
 
     connection.query(query, function (err, results, fields) {
         if (err)
@@ -28,6 +30,7 @@ function post(req, res, next) {
 
         user = results[0];
         connection.end();
+       
 
         bcrypt.compare(req.body.password, user.password, function (err, pwMatch) {
             var payload;

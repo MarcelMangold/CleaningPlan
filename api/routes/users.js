@@ -5,7 +5,7 @@ var CONFIG = require(__dirname + '../../config.js');
 
 function post(req, res, next) {
     var user = {
-        email: req.body.name
+        email: req.body.username
     };
 
     var unhashedPassword = req.body.password;
@@ -48,9 +48,9 @@ function insertUser(user, cb) {
 
     var connection = mysql.createConnection({
         host: 'localhost',
-        user: config.db_user,
-        password: config.db_password,
-        database: config.db_name
+        user: CONFIG.db_user,
+        password: CONFIG.db_password,
+        database: CONFIG.db_name
     });
 
         connection.connect();

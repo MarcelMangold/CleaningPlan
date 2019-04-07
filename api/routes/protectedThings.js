@@ -9,7 +9,7 @@ function get(req, res, next) {
         password: config.database.password,
         database: config.database.databaseName
     });
-
+    console.log("--------------------");
     connection.connect();
     connection.query('SELECT * FROM cleaningplandb.user_management;', function (err, results, fields) {
         if (err)
