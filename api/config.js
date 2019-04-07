@@ -16,7 +16,6 @@ CONFIG.CONNECTION_STRING = 'localhost:3306/cleaningplandb'
 CONFIG.jwt_encryption  = process.env.JWT_ENCRYPTION || 'jwt_please_change';
 CONFIG.jwt_expiration  = process.env.JWT_EXPIRATION || '10000';
 
-jwtSecretKey: "jmvhDdDBMvqb=M@6h&QVA7x",
 CONFIG.signOptions = { expiresIn:  60*60*60 }
 
 module.exports = CONFIG;
