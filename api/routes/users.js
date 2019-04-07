@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
-var config = require(__dirname + '../../config.js');
+var CONFIG = require(__dirname + '../../config.js');
 
 function post(req, res, next) {
     var user = {
@@ -33,7 +33,7 @@ function post(req, res, next) {
 
                 res.status(200).json({
                     user: user,
-                    token: jwt.sign(payload, config.jwtSecretKey, config.signOptions)
+                    token: jwt.sign(payload, CONFIG.jwt_encryption, CONFIG.signOptions)
                    
                 });
             });
@@ -48,9 +48,9 @@ function insertUser(user, cb) {
 
     var connection = mysql.createConnection({
         host: 'localhost',
-        user: config.database.user,
-        password: config.database.password,
-        database: config.database.databaseName
+        user: config.db_user,
+        password: config.db_password,
+        database: config.db_name
     });
 
         connection.connect();

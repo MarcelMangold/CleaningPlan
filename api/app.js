@@ -2,6 +2,7 @@ var express = require('express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 
+const CONFIG = require('./config');
 var publicThings = require(__dirname + '/routes/publicThings.js');
 var protectedThings = require(__dirname + '/routes/protectedThings.js');
 var users = require(__dirname + '/routes/users.js');
@@ -10,7 +11,7 @@ var auth = require(__dirname + '/routes/auth.js');
 
 var app;
 var router;
-var port = 3000;
+var port = CONFIG.port;
 
 app = express();
 app.use(morgan('combined')); 

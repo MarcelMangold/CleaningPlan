@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-var config = require(__dirname + '../../config.js');
+const CONFIG = require(__dirname + '../../config.js');
 
 function auth(role) {
     return function(req, res, next) {
@@ -11,7 +11,7 @@ function auth(role) {
 
         token = req.headers.authorization.split(' ')[1];
         try {
-            payload = jwt.verify(token, config.jwtSecretKey);
+            payload = jwt.verify(token, CONFIG.JWT_ENCRYPTION);
         } catch (e) {
             if (e.name === 'TokenExpiredError') {
                 res.status(401).send({message: 'Token Expired'});

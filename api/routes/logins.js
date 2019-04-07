@@ -1,26 +1,30 @@
 var mysql = require('mysql');
 var bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
-var config = require(__dirname + '../../config.js');
+var CONFIG = require(__dirname + '../../config.js');
 
 function post(req, res, next) {
 
     var connection = mysql.createConnection({
         host: 'localhost',
-        user: config.database.user,
-        password: config.database.password,
-        database: config.database.databaseName
+        user: CONFIG.db_user,
+        password: CONFIG.db_password,
+        database: CONFIG.db_name
     });
 
         connection.connect();
         var query = "SELECT `user_management`.`id`, `user_management`.`username`, `user_management`.`password`" + 
                     "FROM `cleaningplandb`.`user_management`" + 
                     " WHERE `username` ='" + req.body.name + "'";
-        console.log(query);
+
         connection.query(query, function (err, results, fields) {
             if (err)
                 console.error(err);
-
+                if(results.length == 0)
+                {
+                    res.status(401).send({message: 'Invalid user.'});
+                    return;
+                }
                 user = results[0];
                 connection.end();
          
@@ -42,7 +46,7 @@ function post(req, res, next) {
 
                     res.status(200).json({
                         user: user,
-                        token: jwt.sign(payload, config.jwtSecretKey, config.signOptions)
+                        token: jwt.sign(payload, CONFIG.jwt_encryption, CONFIG.signOptions)
                     });
 
       
