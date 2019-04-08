@@ -10,6 +10,8 @@ const routes: Routes = [
     loadChildren: './pages/inside/inside.module#InsidePageModule',
     canActivate: [AuthGuardService]
   },
+  { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule',  
+  canActivate: [AuthGuardService] },
 ];
  
 @NgModule({

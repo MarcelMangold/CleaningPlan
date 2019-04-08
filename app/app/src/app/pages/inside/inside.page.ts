@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
 
+
 @Component({
     selector: 'app-inside',
     templateUrl: './inside.page.html',
@@ -12,6 +13,7 @@ import { environment } from '../../../environments/environment';
 export class InsidePage implements OnInit {
 
     data = '';
+ 
 
     constructor(private authService: AuthService, private storage: Storage, private toastController: ToastController) { }
 
@@ -38,5 +40,7 @@ export class InsidePage implements OnInit {
         });
         toast.then(toast => toast.present());
     }
+
+    
 
 }

@@ -4,7 +4,8 @@
 
 export const environment = {
     production: false,
-    url: 'http://localhost:3000'
+    url: 'http://localhost:3000',
+    jwt_encryption: 'jmvhDdDBMvqb=M@6h&QVA7x'
   };
 /*
  * For easier debugging in development mode, you can import the following file

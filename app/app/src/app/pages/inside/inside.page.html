@@ -1,9 +1,11 @@
 <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>Inside</ion-title>
+    <ion-toolbar>
+      <ion-title>
+        Home
+      </ion-title>
     </ion-toolbar>
   </ion-header>
-   
+  
   <ion-content padding>
     Welcome to the members only area!
    
@@ -12,5 +14,30 @@
     <ion-button expand="full" (click)="loadSpecialInfo()">Load Special Info</ion-button>
     <ion-button expand="full" (click)="logout()">Logout</ion-button>
     <ion-button expand="full" (click)="clearToken()">Clear JWT</ion-button>
-   
+    
+    <ion-tabs>
+        <ion-tab-bar slot="bottom">
+          <ion-tab-button tab="schedule">
+            <ion-icon name="calendar"></ion-icon>
+            <ion-label>Schedule</ion-label>
+            <ion-badge>6</ion-badge>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="speakers">
+            <ion-icon name="contacts"></ion-icon>
+            <ion-label>Speakers</ion-label>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="map">
+            <ion-icon name="map"></ion-icon>
+            <ion-label>Map</ion-label>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="settings" href="/app/pages/settings/(settings:settings)" >
+            <ion-router-outlet name="settings"></ion-router-outlet>
+            <ion-icon name="settings"></ion-icon>
+            <ion-label>Settings</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs>
   </ion-content>
