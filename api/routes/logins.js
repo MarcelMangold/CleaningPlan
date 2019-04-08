@@ -13,7 +13,7 @@ function post(req, res, next) {
     });
 
     connection.connect();
-    console.log(req.body);
+  
 
     var query = "SELECT `user_management`.`id`, `user_management`.`username`, `user_management`.`password`" +
         "FROM `cleaningplandb`.`user_management`" +
@@ -23,14 +23,14 @@ function post(req, res, next) {
         if (err)
             console.error(err);
 
-        if (results == undefined) {
-            res.status(401).send({ message: 'Invalid user.' });
+        if (results[0] == undefined) {
+            res.status(401).send({ message: 'Benutzername ist ungültig' });
             return;
         }
-
+        
         user = results[0];
         connection.end();
-       
+  
 
         bcrypt.compare(req.body.password, user.password, function (err, pwMatch) {
             var payload;
@@ -39,7 +39,7 @@ function post(req, res, next) {
             }
 
             if (!pwMatch) {
-                res.status(401).send({ message: 'Invalid email or password.' });
+                res.status(401).send({ message: 'Benutzer oder Passwort sind ungültig' });
                 return;
             }
 
@@ -47,10 +47,11 @@ function post(req, res, next) {
                 sub: user.username,
                 role: user.role
             };
-
+            var token = jwt.sign(payload, CONFIG.jwt_encryption, CONFIG.signOptions);
+            console.log(token);
             res.status(200).json({
                 user: user,
-                token: jwt.sign(payload, CONFIG.jwt_encryption, CONFIG.signOptions)
+                token: token
             });
 
 

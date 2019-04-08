@@ -7,17 +7,18 @@ function auth(role) {
         var payload;
     
         if (!req.headers.authorization) {
-            return res.status(401).send({message: 'You are not authorized'});
+            return res.status(401).send({message: 'Du bist dafür nicht authentifiziert'});
         }
 
         token = req.headers.authorization.split(' ')[1];
         try {
-            payload = jwt.verify(token, CONFIG.JWT_ENCRYPTION);
+            payload = jwt.verify(token, CONFIG.jwt_encryption);
+            console.log(payload);
         } catch (e) {
             if (e.name === 'TokenExpiredError') {
                 res.status(401).send({message: 'Token Expired'});
             } else {
-                res.status(401).send({message: 'Authentication failed'});
+                res.status(401).send({message: 'Authentifizierung gescheitert'});
             }
 
             return;
@@ -31,7 +32,7 @@ function auth(role) {
             };
             next();
         } else {
-            res.status(401).send({message: 'You are not authorized'});
+            res.status(401).send({message: 'Du bist dafür nicht authentifiziert'});
         }
     }
 }

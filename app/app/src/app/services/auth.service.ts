@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { tap, catchError } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
  
-const TOKEN_KEY = 'jmvhDdDBMvqb=M@6h&QVA7x';
+
  
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class AuthService {
   }
  
   checkToken() {
-    this.storage.get(TOKEN_KEY).then(token => {
+    this.storage.get(environment.jwt_encryption).then(token => {
       if (token) {
         let decoded = this.helper.decodeToken(token);
         let isExpired = this.helper.isTokenExpired(token);
@@ -35,7 +35,7 @@ export class AuthService {
           this.user = decoded;
           this.authenticationState.next(true);
         } else {
-          this.storage.remove(TOKEN_KEY);
+          this.storage.remove(environment.jwt_encryption);
         }
       }
     });
@@ -44,7 +44,7 @@ export class AuthService {
   register(credentials) {
     return this.http.post(`${this.url}/api/users`, credentials).pipe(
       catchError(e => {
-        this.showAlert(e.error.msg);
+        this.showAlert(e.error.message);
         throw new Error(e);
       })
     );
@@ -54,20 +54,20 @@ export class AuthService {
     return this.http.post(`${this.url}/api/login`, credentials)
       .pipe(
         tap(res => {
-          this.storage.set(TOKEN_KEY, res['token']);
+          this.storage.set(environment.jwt_encryption, res['token']);
           this.user = this.helper.decodeToken(res['token']);
           this.authenticationState.next(true);
         }),
         catchError(e => {
-            console.log(e.error);
-          this.showAlert(e.error.msg);
+            console.log(JSON.stringify(e));
+          this.showAlert(e.error.message);
           throw new Error(e);
         })
       );
   }
  
   logout() {
-    this.storage.remove(TOKEN_KEY).then(() => {
+    this.storage.remove(environment.jwt_encryption).then(() => {
       this.authenticationState.next(false);
     });
   }
