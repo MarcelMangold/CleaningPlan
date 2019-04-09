@@ -6,20 +6,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { InsidePage } from './inside.page';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: InsidePage
-  }
-];
+import { TabsPageRoutingModule } from './tabs-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    TabsPageRoutingModule
   ],
   declarations: [InsidePage]
 })

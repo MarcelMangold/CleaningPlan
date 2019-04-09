@@ -1,6 +1,6 @@
 import { AuthGuardService } from './services/auth-guard.service';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { PreloadAllModules, Routes, RouterModule } from '@angular/router';
  
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -10,12 +10,12 @@ const routes: Routes = [
     loadChildren: './pages/inside/inside.module#InsidePageModule',
     canActivate: [AuthGuardService]
   },
-  { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule',  
+  { path: 'inside/settings', loadChildren: './pages/settings/settings.module#SettingsPageModule',  
   canActivate: [AuthGuardService] },
 ];
  
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
