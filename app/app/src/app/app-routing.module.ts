@@ -6,12 +6,11 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   {
-    path: 'inside',
-    loadChildren: './pages/inside/inside.module#InsidePageModule',
+    path: 'tabs',
+    loadChildren: './pages/tabs/tabs.module#TabsPageModule',
     canActivate: [AuthGuardService]
-  },
-  { path: 'inside/settings', loadChildren: './pages/settings/settings.module#SettingsPageModule',  
-  canActivate: [AuthGuardService] },
+  }
+
 ];
  
 @NgModule({

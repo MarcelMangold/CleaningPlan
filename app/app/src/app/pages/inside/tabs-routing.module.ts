@@ -4,7 +4,7 @@ import { InsidePage } from './inside.page';
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'inside',
         component: InsidePage,
         children:
             [
