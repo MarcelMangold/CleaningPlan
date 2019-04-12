@@ -12,6 +12,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { Storage, IonicStorageModule } from '@ionic/storage';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { AddPopoverPageModule } from './pages/private/add-popover/add-popover.module';
  
 export function jwtOptionsFactory(storage) {
   return {
@@ -27,7 +28,7 @@ export function jwtOptionsFactory(storage) {
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
   HttpClientModule,
-  IonicStorageModule.forRoot(),
+  IonicStorageModule.forRoot(), AddPopoverPageModule,
   JwtModule.forRoot({
     jwtOptionsProvider: {
       provide: JWT_OPTIONS,

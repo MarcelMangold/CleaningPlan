@@ -9,8 +9,7 @@ const routes: Routes = [
     path: 'tabs',
     loadChildren: './pages/private/tabs/tabs.module#TabsPageModule',
     canActivate: [AuthGuardService]
-  },  { path: 'add-popover', loadChildren: './pages/private/add-popover/add-popover.module#AddPopoverPageModule' },
-
+  },
 ];
  
 @NgModule({

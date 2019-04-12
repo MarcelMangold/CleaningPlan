@@ -1,9 +1,11 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>addPopover</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-list lines="none">
+    <ion-item lines="inset">  
+        <ion-label position="floating">Item:</ion-label>
+        <ion-input [(ngModel)]="item"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-button slot="start" expand="block" color="success" (click)="closePopover(true)">Save</ion-button>
+        <ion-button slot="end" expand="block" color="danger" (click)="closePopover(false)" >Abort</ion-button>
+    </ion-item>
 
-<ion-content>
-
-</ion-content>
+</ion-list>
