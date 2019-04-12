@@ -4,12 +4,12 @@ import { PreloadAllModules, Routes, RouterModule } from '@angular/router';
  
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
+  { path: 'login', loadChildren: './pages/public/login/login.module#LoginPageModule' },
   {
     path: 'tabs',
-    loadChildren: './pages/tabs/tabs.module#TabsPageModule',
+    loadChildren: './pages/private/tabs/tabs.module#TabsPageModule',
     canActivate: [AuthGuardService]
-  }
+  },  { path: 'add-popover', loadChildren: './pages/private/add-popover/add-popover.module#AddPopoverPageModule' },
 
 ];
  
