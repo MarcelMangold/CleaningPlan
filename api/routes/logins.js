@@ -29,7 +29,7 @@ function post(req, res, next) {
         }
         
         user = results[0];
-        connection.end();
+
   
 
         bcrypt.compare(req.body.password, user.password, function (err, pwMatch) {
@@ -48,7 +48,6 @@ function post(req, res, next) {
                 role: user.role
             };
             var token = jwt.sign(payload, CONFIG.jwt_encryption, CONFIG.signOptions);
-            console.log(token);
             res.status(200).json({
                 user: user,
                 token: token

@@ -55,6 +55,7 @@ export class AuthService {
       .pipe(
         tap(res => {
           this.storage.set(environment.jwt_encryption, res['token']);
+          this.storage.set('username', credentials.username)
           this.user = this.helper.decodeToken(res['token']);
           this.authenticationState.next(true);
         }),

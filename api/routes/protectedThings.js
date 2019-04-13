@@ -19,7 +19,7 @@ function get(req, res, next) {
 
     });
 
-    connection.end();
+   
 
 }
 
