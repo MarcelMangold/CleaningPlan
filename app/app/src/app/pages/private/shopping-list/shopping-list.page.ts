@@ -5,7 +5,6 @@ import { Item } from './item';
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { tap, catchError } from 'rxjs/operators';
 
 @Component({
     selector: 'app-shopping-list',
@@ -30,17 +29,23 @@ export class ShoppingListPage implements OnInit {
     itemCheckboxEvent(item)
     {
         if(item.finished)
+        {
             this.removeItem(item.item_id);
+            item.finished_by = this.user;
+            item.finished_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            this.updateItem(item);
+            this.showToast("Item " + item.item_name + " completed successfully", "success");
+        }
     }
 
-    showToast(message) {
+    showToast(message, color) {
         this.toast = this.toastController.create({
             message: message,
             duration: 2000,
             showCloseButton: true,
             position: 'top',
             closeButtonText: 'OK',
-            color: 'danger'
+            color: color
         }).then((toastData) => {
             toastData.present();
         });
@@ -78,7 +83,7 @@ export class ShoppingListPage implements OnInit {
               this.shoppingList = resp['results'];
             }
             else {
-                this.showToast(resp['message']);
+                this.showToast(resp['message'], "danger");
             }
 
         });
@@ -87,7 +92,7 @@ export class ShoppingListPage implements OnInit {
     addItem(newItem: Item) {
         this.http.post(`${this.url}/api/addItem`, newItem).subscribe(resp => {
             if (!resp['success']) 
-                this.showToast(resp['message']);
+                this.showToast(resp['message'], "danger");
             else
                 this.shoppingList[0].item_id = resp['insertId'];
         });
@@ -102,6 +107,15 @@ export class ShoppingListPage implements OnInit {
                 this.shoppingList.splice(index,1);
             }
               
+        });
+    }
+
+    updateItem(item:Item)
+    {
+        this.http.post(`${this.url}/api/updateItem`, item).subscribe(resp => {
+            if (!resp['success']) 
+                this.showToast(resp['message'], "danger");
+                 
         });
     }
 

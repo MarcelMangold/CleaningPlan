@@ -44,5 +44,29 @@ function getItems(req, res, next) {
 
 }
 
+function updateItem(req,res,next)
+{
+    let item = req.body;
+    var query = "UPDATE `cleaningplandb`.`shopping_list`" + 
+    " SET " +
+    "`finished_by` = '" + item.finished_by + "', " +  
+    "`finished_at` ='" + item.finished_at + "', " + 
+    "`finished` = " + true + 
+    " WHERE `item_id` = " + item.item_id + ";";
+    connection.query(query, function (err, results, fields) {
+        if (err) {
+            console.log(err);
+            res.send({ success: false, message: 'database error by updating itewm', error: err });
+            return;
+        }
+        res.send({ success: true});
+        return;
+
+
+    });
+
+}
+
 module.exports.addItem = addItem;
 module.exports.getItems = getItems;
+module.exports.updateItem = updateItem;

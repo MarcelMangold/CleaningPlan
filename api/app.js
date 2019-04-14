@@ -33,6 +33,7 @@ router.get('/getItems', database.getItems);
 router.post('/users', users.post);
 router.post('/addItem', database.addItem);
 router.post('/login', logins.post);
+router.post('/updateItem', database.updateItem)
 app.use('/api', router);
 
 app.listen(port, function () {
