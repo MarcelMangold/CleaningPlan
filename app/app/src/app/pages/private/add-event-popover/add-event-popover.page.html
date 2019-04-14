@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>New event</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list lines="none" detail="none">
+        <ion-item>
+            <ion-input type="text" placeholder="Title" [(ngModel)]="event.title"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="Description" [(ngModel)]="event.desc"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Start</ion-label>
+            <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="event.startTime"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            <ion-label>End</ion-label>
+            <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="event.endTime"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            <ion-label>All Day?</ion-label>
+            <ion-checkbox [(ngModel)]="event.all_day"></ion-checkbox>
+        </ion-item>
+        <ion-item>
+            <ion-toolbar>
+                <ion-button slot="start" (click)="closePopover(true)" color="success">Save</ion-button>
+                <ion-button slot="end" (click)="closePopover(false)" color="danger">Abort</ion-button>
+            </ion-toolbar>
+        </ion-item>
+    </ion-list>
+</ion-content>

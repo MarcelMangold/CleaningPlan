@@ -17,12 +17,3 @@ export class Item {
                 }
     }
 
-/*     CREATE TABLE `cleaningplandb`.`shopping_list` (
-        `item_id` INT NOT NULL AUTO_INCREMENT,
-        `item_name` VARCHAR(500) NOT NULL,
-        `finished_by` VARCHAR(150) NULL,
-        `created_by` VARCHAR(150) NOT NULL,
-        `created_at` DATETIME NOT NULL,
-        `finished_at` DATETIME NULL,
-        `finished` TINYINT NOT NULL,
-        PRIMARY KEY (`item_id`)); */

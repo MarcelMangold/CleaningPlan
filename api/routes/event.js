@@ -8,12 +8,14 @@ var connection = mysql.createConnection({
     database: CONFIG.db_name
 });
 
-function addItem(req, res, next) {
+function addEvent(req, res, next) {
 
-    let item = req.body;
-    var query = "INSERT INTO `cleaningplandb`.`shopping_list`"
-        + "( `item_name`,  `created_by`, `created_at`, `finished`)" +
-        "VALUES" + "( '" + item.item_name + "', '" + item.created_by + "' , '" + item.created_at + "', " + item.finished + " );"
+    let event = req.body;
+    var query = "INSERT INTO `cleaningplandb`.`events` ( `event_name`, `description`,  `start_time`, `end_time`, `all_day`, `user_id`)" + 
+    " VALUES " + 
+    "( '"+ event.title + "' , '" + event.desc + "', '" + event.startTime + "' , '" + event.endTime  + "' , " + event.all_day + " , " + event.user_id + " );";
+ 
+    
     connection.query(query, function (err, results, fields) {
         if (err) {
             console.log(err);
@@ -28,7 +30,7 @@ function addItem(req, res, next) {
 
 }
 
-function getItems(req, res, next) {
+function getEvents(req, res, next) {
 
     var query = "SELECT * FROM cleaningplandb.shopping_list WHERE finished = false;"
     connection.query(query, function (err, results, fields) {
@@ -44,7 +46,7 @@ function getItems(req, res, next) {
 
 }
 
-function updateItem(req,res,next)
+function updateEvent(req,res,next)
 {
     let item = req.body;
     var query = "UPDATE `cleaningplandb`.`shopping_list`" + 
@@ -67,6 +69,17 @@ function updateItem(req,res,next)
 
 }
 
-module.exports.addItem = addItem;
-module.exports.getItems = getItems;
-module.exports.updateItem = updateItem;
+module.exports.addEvent = addEvent;
+module.exports.getEvents = getEvents;
+module.exports.updateEvent = updateEvent;
+
+/* CREATE TABLE `cleaningplandb`.`events` (
+    `event_id` INT NOT NULL AUTO_INCREMENT,
+    `event_name` VARCHAR(250) NOT NULL,
+    `description` VARCHAR(500) NULL,
+    `start_time` DATETIME NOT NULL,
+    `end_time` DATETIME NULL,
+    `all_day` TINYINT NULL,
+    `user_id` INT NOT NULL,
+    PRIMARY KEY (`event_id`),
+   FOREIGN KEY (`user_id`) REFERENCES user_management(id)); */

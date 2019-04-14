@@ -5,6 +5,7 @@ import { Item } from './item';
 import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
     selector: 'app-shopping-list',
@@ -19,7 +20,7 @@ export class ShoppingListPage implements OnInit {
     url = environment.url;
     item;
     toast;
-    constructor(public toastController: ToastController, private popoverController: PopoverController, private storage: Storage, private http: HttpClient) { }
+    constructor(public toastController: ToastController, private popoverController: PopoverController, private storage: Storage, private http: HttpClient, private authService: AuthService) { }
 
     ngOnInit() {
         this.storage.get('username').then((data) => { this.user = data });
@@ -117,6 +118,10 @@ export class ShoppingListPage implements OnInit {
                 this.showToast(resp['message'], "danger");
                  
         });
+    }
+
+    logout() {
+        this.authService.logout();
     }
 
 

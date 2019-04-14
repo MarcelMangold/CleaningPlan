@@ -11,34 +11,3 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-toolbar color="primary">
-
-        <ion-buttons slot="start">
-            <button ion-button (click)="changeMode('day')">Tag</button>
-            <button ion-button (click)="changeMode('week')">Woche</button>
-            <button ion-button (click)="changeMode('month')">Monat</button>
-        </ion-buttons>
-        <ion-title>{{viewTitle}}</ion-title>
-        <ion-buttons slot="end">
-            <button ion-button [disabled]="isToday" (click)="today()">Heutiger Tag</button>
-            <button ion-button icon-only (click)="addEvent()">
-                <ion-icon name="add-circle-outline"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-toolbar>
-    <calendar 
-    [dateFormatter]="calendar.dateFormatter" 
-    [eventSource]="eventSource" 
-    [calendarMode]="calendar.mode"
-    [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)"  allDayLabel="ganztags"
-    (onRangeChanged)="reloadSource(startTime, endTime)"
-     (onEventSelected)="onEventSelected($event)"
-      (onTitleChanged)="onViewTitleChanged($event)"
-       (onTimeSelected)="onTimeSelected($event)" step="30" [scrollToHour]="currentHour" preserveScrollPosition=true
-       >
-
-    </calendar>
-
-
-</ion-content>

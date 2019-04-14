@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Calendar</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button color="secondary" (click)="logout()">
+                <ion-icon slot="icon-only" name="log-out"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ 
+    <ion-toolbar color="primary">
+
+        <ion-buttons slot="start">
+            <ion-button (click)="changeMode('day')">Tag</ion-button>
+            <ion-button  (click)="changeMode('week')">Woche</ion-button>
+            <ion-button  (click)="changeMode('month')">Monat</ion-button>
+        </ion-buttons>
+        <ion-title>{{viewTitle}}</ion-title>
+        <ion-buttons slot="end">
+           <!-- <ion-button [disabled]="isToday" (click)="today()">Heutiger Tag</ion-button> -->
+            <ion-button icon-only (click)="addEvent()">
+                <ion-icon name="add-circle-outline"></ion-icon>
+            </ion-button >
+        </ion-buttons>
+    </ion-toolbar>
+    <calendar [dateFormatter]="calendar.dateFormatter" [eventSource]="eventSource" [calendarMode]="calendar.mode" [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)" allDayLabel="ganztags" (onRangeChanged)="reloadSource(startTime, endTime)" (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)" (onTimeSelected)="onTimeSelected($event)" step="30" [scrollToHour]="currentHour" preserveScrollPosition=true>
+
+    </calendar>
+
+
+</ion-content>

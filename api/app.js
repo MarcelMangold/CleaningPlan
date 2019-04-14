@@ -8,7 +8,8 @@ var protectedThings = require(__dirname + '/routes/protectedThings.js');
 var users = require(__dirname + '/routes/users.js');
 var logins = require(__dirname + '/routes/logins.js');
 var auth = require(__dirname + '/routes/auth.js');
-var database = require(__dirname + '/routes/database.js');
+var item = require(__dirname + '/routes/item.js');
+var event = require(__dirname + '/routes/event.js');
 
 var app;
 var router;
@@ -29,11 +30,12 @@ router = express.Router();
 
 router.get('/public_things', publicThings.get);
 router.get('/protected_things', auth(), protectedThings.get);
-router.get('/getItems', database.getItems);
+router.get('/getItems', item.getItems);
 router.post('/users', users.post);
-router.post('/addItem', database.addItem);
+router.post('/addItem', item.addItem);
 router.post('/login', logins.post);
-router.post('/updateItem', database.updateItem)
+router.post('/updateItem', item.updateItem)
+router.post('/addEvent', event.addEvent)
 app.use('/api', router);
 
 app.listen(port, function () {
