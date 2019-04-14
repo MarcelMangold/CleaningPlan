@@ -21,7 +21,7 @@ export class CalendarPage implements OnInit {
     currentHour;
     toast;
     url = environment.url;
-    
+
     isToday: boolean;
 
     event = {
@@ -81,7 +81,7 @@ export class CalendarPage implements OnInit {
         }
     };
 
-    constructor(private authService: AuthService, private storage: Storage, private popoverController: PopoverController, private http: HttpClient, private toastController:ToastController) { }
+    constructor(private authService: AuthService, private storage: Storage, private popoverController: PopoverController, private http: HttpClient, private toastController: ToastController) { }
 
 
     ngOnInit() {
@@ -90,6 +90,7 @@ export class CalendarPage implements OnInit {
         let date = new Date()
         this.currentHour = date.getHours();
         this.resetEvent();
+        this.getEventsFromDatabase();
     }
 
     resetEvent() {
@@ -176,22 +177,48 @@ export class CalendarPage implements OnInit {
         return await popover.present();
     }
 
-    addEventToDabase(eventDatabase)
-    {
-        eventDatabase.startTime =  new Date(eventDatabase.startTime).toISOString().slice(0, 19).replace('T', ' ')
-        eventDatabase.endTime =  new Date(eventDatabase.endTime).toISOString().slice(0, 19).replace('T', ' ')
+    addEventToDabase(eventDatabase) {
+        eventDatabase.startTime = new Date(eventDatabase.startTime).toISOString().slice(0, 19).replace('T', ' ')
+        eventDatabase.endTime = new Date(eventDatabase.endTime).toISOString().slice(0, 19).replace('T', ' ')
         this.http.post(`${this.url}/api/addEvent`, eventDatabase).subscribe(resp => {
-            if (!resp['success']) 
-            {
+            if (!resp['success']) {
                 this.showToast(resp['message'], "danger");
                 this.eventSource.pop;
                 this.myCal.loadEvents();
             }
-            else
-            {
-                this.eventSource[this.eventSource.length-1].event_id = resp['insertId'];
+            else {
+                this.eventSource[this.eventSource.length - 1].event_id = resp['insertId'];
             }
         });
+    }
+
+    getEventsFromDatabase() {
+        this.http.get(`${this.url}/api/getEvents`).subscribe(resp => {
+            if (resp['results']) {
+                this.eventSource = this.transformDate(resp['results']);
+            }
+            else {
+                this.showToast(resp['message'], "danger");
+            }
+
+        });
+
+    }
+
+    transformDate(events) {
+        let transformedEvents = [];
+        events.forEach(element => {
+           transformedEvents.push({
+            event_id: element.event_id,
+            title: element.event_name,
+            desc: element.description,
+            startTime:  new Date(element.start_time),
+            endTime: new Date(element.end_time),
+            all_day: element.all_day,
+            user_id: element.user_id
+           });
+        });
+        return transformedEvents;
     }
 
     showToast(message, color) {

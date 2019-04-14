@@ -31,6 +31,7 @@ router = express.Router();
 router.get('/public_things', publicThings.get);
 router.get('/protected_things', auth(), protectedThings.get);
 router.get('/getItems', item.getItems);
+router.get('/getEvents', event.getEvents);
 router.post('/users', users.post);
 router.post('/addItem', item.addItem);
 router.post('/login', logins.post);

@@ -32,7 +32,7 @@ function addEvent(req, res, next) {
 
 function getEvents(req, res, next) {
 
-    var query = "SELECT * FROM cleaningplandb.shopping_list WHERE finished = false;"
+    var query = "SELECT * FROM cleaningplandb.events;"
     connection.query(query, function (err, results, fields) {
         if (err) {
             console.log(err);
