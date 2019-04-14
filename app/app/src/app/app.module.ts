@@ -14,6 +14,8 @@ import { Storage, IonicStorageModule } from '@ionic/storage';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AddPopoverPageModule } from './pages/private/add-popover/add-popover.module';
 import { AddEventPopoverPageModule } from './pages/private/add-event-popover/add-event-popover.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
  
 export function jwtOptionsFactory(storage) {
   return {
@@ -36,7 +38,8 @@ export function jwtOptionsFactory(storage) {
       useFactory: jwtOptionsFactory,
       deps: [Storage],
     }
-  })],
+  }),
+  ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,
     SplashScreen,

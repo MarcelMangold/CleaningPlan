@@ -21,7 +21,9 @@ export class CalendarPage implements OnInit {
     currentHour;
     toast;
     url = environment.url;
-
+    startTime;
+    endTime;
+    reloadSource;
     isToday: boolean;
 
     event = {
