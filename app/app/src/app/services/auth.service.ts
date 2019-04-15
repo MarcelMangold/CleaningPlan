@@ -72,7 +72,10 @@ export class AuthService {
     this.storage.remove(environment.jwt_encryption).then(() => {
       this.authenticationState.next(false);
     });
+    window.location.reload(true)
   }
+
+
  
   getSpecialData() {
     return this.http.get(`${this.url}/api/protected_things`).pipe(

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { AuthService } from 'src/app/services/auth.service';
 import { Storage } from '@ionic/storage';
-import { PopoverController, ToastController } from '@ionic/angular';
+import { PopoverController, ToastController, AlertController } from '@ionic/angular';
 import { AddEventPopoverPage } from '../add-event-popover/add-event-popover.page';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -30,8 +30,8 @@ export class CalendarPage implements OnInit {
         event_id: "",
         title: "",
         desc: "",
-        startTime: "",
-        endTime: "",
+        startTime: null,
+        endTime: null,
         all_day: false,
         user_id: null,
     }
@@ -83,7 +83,7 @@ export class CalendarPage implements OnInit {
         }
     };
 
-    constructor(private authService: AuthService, private storage: Storage, private popoverController: PopoverController, private http: HttpClient, private toastController: ToastController) { }
+    constructor(private alertController: AlertController, private authService: AuthService, private storage: Storage, private popoverController: PopoverController, private http: HttpClient, private toastController: ToastController) { }
 
 
     ngOnInit() {
@@ -100,8 +100,8 @@ export class CalendarPage implements OnInit {
             event_id: "",
             title: "",
             desc: "",
-            startTime: new Date().toISOString(),
-            endTime: new Date().toISOString(),
+            startTime: new Date(),
+            endTime: new Date(),
             all_day: false,
             user_id: this.user_id
         }
@@ -111,9 +111,11 @@ export class CalendarPage implements OnInit {
     }
 
     onEventSelected(event) {
+
         console.log('Event selected:' + event.startTime + '-' + event.endTime + ',' + event.title);
     }
 
+    
     changeMode(mode) {
         this.calendar.mode = mode;
     }
@@ -125,7 +127,18 @@ export class CalendarPage implements OnInit {
     onTimeSelected(ev) {
         console.log('Selected time: ' + ev.selectedTime + ', hasEvents: ' +
             (ev.events !== undefined && ev.events.length !== 0) + ', disabled: ' + ev.disabled);
+            this.getCurrentEvents(ev.selectedTime);
     }
+
+    getCurrentEvents(date)
+    {
+      /*   this.currentEvents = [];
+        this.eventSource.forEach(element => {
+            console.log("---startTIme" + element.startTime.getYear() + "---current" + date);
+            if(element.startTime.toDateString() == date.toDateString() || )
+                this.currentEvents.push(element);       
+        }); */
+    }    
 
     onCurrentDateChanged(event: Date) {
         var today = new Date();
@@ -144,6 +157,7 @@ export class CalendarPage implements OnInit {
             all_day: this.event.all_day,
             user_id: this.user_id
         }
+
         const popover = await this.popoverController.create({
             component: AddEventPopoverPage,
             componentProps: {
@@ -160,15 +174,9 @@ export class CalendarPage implements OnInit {
                     eventCopy.startTime = new Date(eventCopy.startTime);
                     eventCopy.endTime = new Date(eventCopy.endTime);
                     if (eventCopy.all_day) {
-                        let start = eventCopy.startTime;
-                        let end = eventCopy.endTime;
-                        eventCopy.startTime = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()));
-                        eventCopy.endTime = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate() + 1));
-
-
+                        eventCopy.startTime = new Date(Date.UTC(eventCopy.startTime.getUTCFullYear(), eventCopy.startTime.getUTCMonth(), eventCopy.startTime.getUTCDate()));
+                        eventCopy.endTime = new Date(Date.UTC( eventCopy.endTime.getUTCFullYear(),  eventCopy.endTime.getUTCMonth(),  eventCopy.endTime.getUTCDate() + 1));
                     }
-                    this.eventSource.push(eventCopy);
-                    this.myCal.loadEvents();
                     this.addEventToDabase(eventCopy);
 
 
@@ -184,23 +192,22 @@ export class CalendarPage implements OnInit {
         eventDatabase.endTime = new Date(eventDatabase.endTime).toISOString().slice(0, 19).replace('T', ' ')
         this.http.post(`${this.url}/api/addEvent`, eventDatabase).subscribe(resp => {
             if (!resp['success']) {
-                this.showToast(resp['message'], "danger");
+                this.showToast(resp['message'], "danger", "top");
                 this.eventSource.pop;
                 this.myCal.loadEvents();
             }
-            else {
-                this.eventSource[this.eventSource.length - 1].event_id = resp['insertId'];
-            }
+            this.getEventsFromDatabase();
         });
     }
 
     getEventsFromDatabase() {
+        this.eventSource = [];
         this.http.get(`${this.url}/api/getEvents`).subscribe(resp => {
             if (resp['results']) {
                 this.eventSource = this.transformDate(resp['results']);
             }
             else {
-                this.showToast(resp['message'], "danger");
+                this.showToast(resp['message'], "danger", "top");
             }
 
         });
@@ -223,12 +230,12 @@ export class CalendarPage implements OnInit {
         return transformedEvents;
     }
 
-    showToast(message, color) {
+    showToast(message, color, position) {
         this.toast = this.toastController.create({
             message: message,
             duration: 2000,
             showCloseButton: true,
-            position: 'top',
+            position: position,
             closeButtonText: 'OK',
             color: color
         }).then((toastData) => {
@@ -249,7 +256,27 @@ export class CalendarPage implements OnInit {
         return date < current;
     };
 
-
+    async deleteEvent(event) {
+        const alert = await this.alertController.create({
+          header: 'Event löschen',
+          message: 'Willst du das Event <strong>'+ event.title +'</strong> löschen?',
+          buttons: [
+            {
+              text: 'Abbrechen',
+              role: 'cancel',
+              cssClass: 'danger'
+            }, {
+              text: 'Bestätigen',
+              cssClass: 'success',
+              handler: () => {
+                this.showToast("Event " + event + " erfolgreich gelöscht!", "success", "bottom");
+              }
+            }
+          ]
+        });
+    
+        await alert.present();
+      }
 
     logout() {
         this.authService.logout();
