@@ -31,12 +31,10 @@
         <ion-list  *ngFor="let event of selectedDate" no-lines class="event-list" padding>
             <ion-item> 
                 <ion-label> {{event.title}}</ion-label>
-                <ion-buttons>
-                    <ion-button><ion-icon name="resize"></ion-icon></ion-button>
-                </ion-buttons>
-                <ion-buttons *ngIf="event.user_id == user_id">
-                    <ion-button><ion-icon name="create"></ion-icon></ion-button>
-                    <ion-button (click)="deleteEvent(event)"><ion-icon name="trash"></ion-icon></ion-button>
+                <ion-button fill="clear" color="medium" (click)="showEvent(event)"><ion-icon name="resize"></ion-icon></ion-button>
+                <ion-buttons  *ngIf="event.user_id == user_id">
+                    <ion-button><ion-icon color="medium" name="create"></ion-icon></ion-button>
+                    <ion-button (click)="deleteEvent(event)"><ion-icon color="medium" name="trash"></ion-icon></ion-button>
                 </ion-buttons>      
             </ion-item>    
         </ion-list>

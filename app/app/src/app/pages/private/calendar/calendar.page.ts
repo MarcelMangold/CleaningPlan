@@ -115,7 +115,7 @@ export class CalendarPage implements OnInit {
         console.log('Event selected:' + event.startTime + '-' + event.endTime + ',' + event.title);
     }
 
-    
+
     changeMode(mode) {
         this.calendar.mode = mode;
     }
@@ -127,18 +127,17 @@ export class CalendarPage implements OnInit {
     onTimeSelected(ev) {
         console.log('Selected time: ' + ev.selectedTime + ', hasEvents: ' +
             (ev.events !== undefined && ev.events.length !== 0) + ', disabled: ' + ev.disabled);
-            this.getCurrentEvents(ev.selectedTime);
+        this.getCurrentEvents(ev.selectedTime);
     }
 
-    getCurrentEvents(date)
-    {
-      /*   this.currentEvents = [];
-        this.eventSource.forEach(element => {
-            console.log("---startTIme" + element.startTime.getYear() + "---current" + date);
-            if(element.startTime.toDateString() == date.toDateString() || )
-                this.currentEvents.push(element);       
-        }); */
-    }    
+    getCurrentEvents(date) {
+        /*   this.currentEvents = [];
+          this.eventSource.forEach(element => {
+              console.log("---startTIme" + element.startTime.getYear() + "---current" + date);
+              if(element.startTime.toDateString() == date.toDateString() || )
+                  this.currentEvents.push(element);       
+          }); */
+    }
 
     onCurrentDateChanged(event: Date) {
         var today = new Date();
@@ -175,7 +174,7 @@ export class CalendarPage implements OnInit {
                     eventCopy.endTime = new Date(eventCopy.endTime);
                     if (eventCopy.all_day) {
                         eventCopy.startTime = new Date(Date.UTC(eventCopy.startTime.getUTCFullYear(), eventCopy.startTime.getUTCMonth(), eventCopy.startTime.getUTCDate()));
-                        eventCopy.endTime = new Date(Date.UTC( eventCopy.endTime.getUTCFullYear(),  eventCopy.endTime.getUTCMonth(),  eventCopy.endTime.getUTCDate() + 1));
+                        eventCopy.endTime = new Date(Date.UTC(eventCopy.endTime.getUTCFullYear(), eventCopy.endTime.getUTCMonth(), eventCopy.endTime.getUTCDate() + 1));
                     }
                     this.addEventToDabase(eventCopy);
 
@@ -217,15 +216,15 @@ export class CalendarPage implements OnInit {
     transformDate(events) {
         let transformedEvents = [];
         events.forEach(element => {
-           transformedEvents.push({
-            event_id: element.event_id,
-            title: element.event_name,
-            desc: element.description,
-            startTime:  new Date(element.start_time),
-            endTime: new Date(element.end_time),
-            all_day: element.all_day,
-            user_id: element.user_id
-           });
+            transformedEvents.push({
+                event_id: element.event_id,
+                title: element.event_name,
+                desc: element.description,
+                startTime: new Date(element.start_time),
+                endTime: new Date(element.end_time),
+                all_day: element.all_day,
+                user_id: element.user_id
+            });
         });
         return transformedEvents;
     }
@@ -258,25 +257,29 @@ export class CalendarPage implements OnInit {
 
     async deleteEvent(event) {
         const alert = await this.alertController.create({
-          header: 'Event löschen',
-          message: 'Willst du das Event <strong>'+ event.title +'</strong> löschen?',
-          buttons: [
-            {
-              text: 'Abbrechen',
-              role: 'cancel',
-              cssClass: 'danger'
-            }, {
-              text: 'Bestätigen',
-              cssClass: 'success',
-              handler: () => {
-                this.showToast("Event " + event + " erfolgreich gelöscht!", "success", "bottom");
-              }
-            }
-          ]
+            header: 'Event löschen',
+            message: 'Willst du das Event <strong>' + event.title + '</strong> löschen?',
+            buttons: [
+                {
+                    text: 'Abbrechen',
+                    role: 'cancel',
+                    cssClass: 'danger'
+                }, {
+                    text: 'Bestätigen',
+                    cssClass: 'success',
+                    handler: () => {
+                        this.showToast("Event " + event + " erfolgreich gelöscht!", "success", "bottom");
+                    }
+                }
+            ]
         });
-    
+
         await alert.present();
-      }
+    }
+
+    async showEvent(event) {
+     
+    }
 
     logout() {
         this.authService.logout();
