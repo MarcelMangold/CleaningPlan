@@ -146,6 +146,38 @@ export class CalendarPage implements OnInit {
         this.isToday = today.getTime() === event.getTime();
     }
 
+    async editEvent(event)
+    {
+        const popover = await this.popoverController.create({
+            component: AddEventPopoverPage,
+            componentProps: {
+                event: event,
+                add: false
+            },
+            cssClass: 'pop-over-style'
+        });
+
+        popover.onDidDismiss().then((dataReturned) => {
+            if (dataReturned !== null) {
+                if (dataReturned.data != undefined) {
+                  /*   eventCopy = dataReturned.data;
+                    eventCopy.user_id = this.user_id
+                    eventCopy.startTime = new Date(eventCopy.startTime);
+                    eventCopy.endTime = new Date(eventCopy.endTime);
+                    if (eventCopy.all_day) {
+                        eventCopy.startTime = new Date(Date.UTC(eventCopy.startTime.getUTCFullYear(), eventCopy.startTime.getUTCMonth(), eventCopy.startTime.getUTCDate()));
+                        eventCopy.endTime = new Date(Date.UTC(eventCopy.endTime.getUTCFullYear(), eventCopy.endTime.getUTCMonth(), eventCopy.endTime.getUTCDate() + 1));
+                    }
+                    this.addEventToDabase(eventCopy); */
+
+
+                }
+            }
+        });
+
+        return await popover.present();
+    }
+
     async addEvent() {
         let eventCopy = {
             event_id: "",
@@ -160,7 +192,8 @@ export class CalendarPage implements OnInit {
         const popover = await this.popoverController.create({
             component: AddEventPopoverPage,
             componentProps: {
-                event: eventCopy
+                event: eventCopy,
+                add: true
             },
             cssClass: 'pop-over-style'
         });

@@ -20,7 +20,10 @@ export class AddEventPopoverPage implements OnInit {
         user_id: null
     }
 
+    add = true;
+
     ngOnInit() {
+        console.log(this.add);
     }
 
     async closePopover(saved) {

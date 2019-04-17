@@ -10,6 +10,7 @@ var logins = require(__dirname + '/routes/logins.js');
 var auth = require(__dirname + '/routes/auth.js');
 var item = require(__dirname + '/routes/item.js');
 var event = require(__dirname + '/routes/event.js');
+var api = require(__dirname + '/routes/api.js');
 
 var app;
 var router;
@@ -28,6 +29,7 @@ app.use(function (req, res, next) {
 
 router = express.Router();
 
+router.get('/api', api.get);
 router.get('/public_things', publicThings.get);
 router.get('/protected_things', auth(), protectedThings.get);
 router.get('/getItems', item.getItems);
