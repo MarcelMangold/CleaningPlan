@@ -17,12 +17,12 @@
             <ion-input type="text" placeholder="Beschreibung" [(ngModel)]="event.desc"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>Start</ion-label>
-            <ion-datetime display-format="MMM DD, YYYY HH:mm" [(ngModel)]="event.startTime" placeholder="{{event.startTime}}"></ion-datetime>
+            Start
+            <ion-datetime picker-format="MMMM YYYY"  display-format="MMM DD, YYYY HH:mm" [(ngModel)]="event.startTime" placeholder="{{event.startTime}}"></ion-datetime>
         </ion-item>
         <ion-item>
-            <ion-label>End</ion-label>
-            <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="event.endTime" [placeholder]="event.endTime"></ion-datetime>
+            End
+            <ion-datetime  picker-format="MMMM YYYY" displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="event.endTime" placeholder="{{event.endTime}}"></ion-datetime>
         </ion-item>
         <ion-item>
             <ion-label>All Day?</ion-label>

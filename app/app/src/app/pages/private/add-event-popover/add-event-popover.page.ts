@@ -23,7 +23,7 @@ export class AddEventPopoverPage implements OnInit {
     add = true;
 
     ngOnInit() {
-        console.log(this.add);
+     
     }
 
     async closePopover(saved) {
