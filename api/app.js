@@ -11,6 +11,7 @@ var auth = require(__dirname + '/routes/auth.js');
 var item = require(__dirname + '/routes/item.js');
 var event = require(__dirname + '/routes/event.js');
 var api = require(__dirname + '/routes/api.js');
+var task = require(__dirname + '/routes/task.js');
 
 var app;
 var router;
@@ -39,6 +40,7 @@ router.post('/addItem', item.addItem);
 router.post('/login', logins.post);
 router.post('/updateItem', item.updateItem)
 router.post('/addEvent', event.addEvent)
+router.post('/addTask', task.addTask)
 app.use('/api', router);
 
 app.listen(port, function () {
