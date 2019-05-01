@@ -37,7 +37,7 @@ export class HomePage implements OnInit {
             componentProps: {
 
             },
-            cssClass: 'pop-over-style',
+            cssClass: 'pop-over-style-add-task',
             event: ev
         });
 

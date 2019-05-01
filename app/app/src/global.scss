@@ -12,4 +12,12 @@
 
 //import own css files
 @import '../../app/src/app/pages/private/add-event-popover/add-event-popover.page.scss';
+.pop-over-style-add-task .popover-content {
+    top:45%!important;
+    bottom: 7%;
+    width: 100%!important;
+    margin-left: -2%;
+
+}
+ 
 
