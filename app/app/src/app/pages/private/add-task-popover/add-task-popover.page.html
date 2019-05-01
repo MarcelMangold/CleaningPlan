@@ -17,13 +17,13 @@
                         <ion-label position="floating">Repeat all:</ion-label>
                     </ion-col>
                     <ion-col size="2">
-                        <ion-input type="number" value="1"></ion-input>
+                        <ion-input [(ngModel)]="task.timePeriod" type="number" value="1"></ion-input>
                     </ion-col>
                     <ion-col size="10">
-                        <ion-select [(ngModel)]="task.duration" placeholder="week">
-                            <ion-select-option value="day">Day</ion-select-option>
-                            <ion-select-option value="week">Week</ion-select-option>
-                            <ion-select-option value="month">Month</ion-select-option>
+                        <ion-select [(ngModel)]="task.duration" placeholder="Select One"  >
+                            <ion-select-option value="0">Day</ion-select-option>
+                            <ion-select-option value="1">Week</ion-select-option>
+                            <ion-select-option value="2">Month</ion-select-option>
                         </ion-select>
                     </ion-col>
                 </ion-row>
@@ -38,34 +38,34 @@
                                 <ion-label>Repeats on:</ion-label>
                             </ion-col>
                             <ion-col size="1">
-                                <ion-checkbox (click)="onChange(0)" [(ngModel)]="task.weekdays.monday" class="m_checkbox"></ion-checkbox>
+                                <ion-checkbox (click)="onChange(0)" [(ngModel)]="weekdays[0]" class="m_checkbox"></ion-checkbox>
                             </ion-col>
                             <ion-col size="1">
-                                <ion-checkbox [(ngModel)]="task.weekdays.tuesday" class="d_checkbox"></ion-checkbox>
+                                <ion-checkbox (click)="onChange(1)" [(ngModel)]="weekdays[1]" class="d_checkbox"></ion-checkbox>
                             </ion-col>
                             <ion-col size="1">
-                                <ion-checkbox [(ngModel)]="task.weekdays.wednesday" class="m_checkbox"></ion-checkbox>
+                                <ion-checkbox (click)="onChange(2)" [(ngModel)]="weekdays[2]" class="m_checkbox"></ion-checkbox>
                             </ion-col>
                             <ion-col size="1">
-                                <ion-checkbox [(ngModel)]="task.weekdays.thursday" class="d_checkbox"></ion-checkbox>
+                                <ion-checkbox (click)="onChange(3)" [(ngModel)]="weekdays[3]" class="d_checkbox"></ion-checkbox>
                             </ion-col>
                             <ion-col size="1">
-                                <ion-checkbox [(ngModel)]="task.weekdays.friday" class="f_checkbox"></ion-checkbox>
+                                <ion-checkbox (click)="onChange(4)" [(ngModel)]="weekdays[4]" class="f_checkbox"></ion-checkbox>
                             </ion-col>
                             <ion-col size="1">
-                                <ion-checkbox [(ngModel)]="task.weekdays.saturday" class="s_checkbox"></ion-checkbox>
+                                <ion-checkbox (click)="onChange(5)" [(ngModel)]="weekdays[5]" class="s_checkbox"></ion-checkbox>
                             </ion-col>
                             <ion-col size="1">
-                                <ion-checkbox [(ngModel)]="task.weekdays.sunday" class="s_checkbox"></ion-checkbox>
+                                <ion-checkbox (click)="onChange(6)" [(ngModel)]="weekdays[6]" class="s_checkbox"></ion-checkbox>
                             </ion-col>
                         </ion-row>
                     </ion-grid>
                 </ion-col>
             </ion-grid>
         </ion-item>
-        <ion-item padding> 
-            <ion-button class="save_button" fill="clear" slot="start"  (click)="closePopover(true)">Save</ion-button>
-            <ion-button class="abort_button" fill="clear" slot="end"  (click)="closePopover(true)">Abort</ion-button>
+        <ion-item padding>
+            <ion-button class="save_button" fill="clear" slot="start" (click)="closePopover(true)">Save</ion-button>
+            <ion-button class="abort_button" fill="clear" slot="end" (click)="closePopover(true)">Abort</ion-button>
         </ion-item>
     </ion-list>
 

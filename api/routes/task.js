@@ -9,49 +9,25 @@ var connection = mysql.createConnection({
 });
 
 async function addTask(req, res, next) {
-    var resultCreateDetailInformation = await createDetailInformation(req.body);
-    var resultCreateTask = await createTask(req.body, resultCreateDetailInformation.insertId);
-    res.send(resultCreateTask);
+    let task = req.body;
+    let query =
+        "INSERT INTO `cleaningplandb`.`tasks` ( `task_name`, `duration`,  `finished_on`, `time_period`, `timestamp`,  `user_id`)   VALUES ('" +
+        task.taskName + "', " + task.duration + "," + task.finishedOn + "," + task.timePeriod + ",'" + new Date().toISOString().slice(0, 19).replace('T', ' ') + "'," + task.user_id + ");";
+    connection.query(query, function (err, results, fields) {
+        if (err) {
+            console.log(err);
+            res.send({ success: false, message: 'database error by creating item', error: err });
+            return;
+        }
+        res.send({ success: true, insertId: results.insertId });
+        return;
 
-}
 
-function createDetailInformation(task) {
-    return new Promise(function (resolve, reject) {
-        if (task.duration == "day")
-            task.duration = 0;
-        else if (task.duration == "week")
-            task.duration = 1;
-        else if (task.duration == "month")
-            task.duration = 2;
-
-        var weekdays = task.weekdays;
-        var query =
-            "INSERT INTO `cleaningplandb`.`task_information` (`duration`,  `monday`,  `tuesday`,  `wednesday`,  `thursday`,  `friday`,  `saturday`,  `sunday`)  VALUES ( " +
-            task.duration + ", " + weekdays.monday + ", " + weekdays.tuesday + ", " + weekdays.wednesday + ", " + weekdays.thursday + ", " + weekdays.friday + ", " + weekdays.saturday + ", " + weekdays.sunday + "); ";
-        connection.query(query, function (err, results, fields) {
-            if (err) {
-                console.log(err);
-                return reject({ success: false, message: 'database error by creating item', error: err });
-            }
-            return resolve({ success: true, insertId: results.insertId });
-        });
     });
+
 }
 
-function createTask(task, detailInformationId) {
-    return new Promise(function (resolve, reject) {
-        var query =
-            "INSERT INTO `cleaningplandb`.`tasks` ( `task_name`, `task_information_id`,   `user_id`)   VALUES ('" +
-            task.taskName + "', " + detailInformationId + "," + task.user_id + ");";
-        connection.query(query, function (err, results, fields) {
-            if (err) {
-                console.log(err);
-                return reject({ success: false, message: 'database error by creating item', error: err });
-            }
-            return resolve({ success: true, insertId: results.insertId });
-        });
-    });
-}
+
 
 
 function getEvents(req, res, next) {
