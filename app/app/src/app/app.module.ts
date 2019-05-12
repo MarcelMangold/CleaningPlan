@@ -17,6 +17,10 @@ import { AddEventPopoverPageModule } from './pages/private/add-event-popover/add
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AddTaskPopoverPageModule } from './pages/private/add-task-popover/add-task-popover.module';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { FormsModule } from '@angular/forms';
+import { QrcodeDetectedPopoverPageModule } from './pages/private/qrcode-detected-popover/qrcode-detected-popover.module';
  
 export function jwtOptionsFactory(storage) {
   return {
@@ -31,8 +35,8 @@ export function jwtOptionsFactory(storage) {
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,
-  HttpClientModule,
-  IonicStorageModule.forRoot(), AddPopoverPageModule, AddEventPopoverPageModule, AddTaskPopoverPageModule,
+  HttpClientModule, FormsModule,
+  IonicStorageModule.forRoot(), AddPopoverPageModule, AddEventPopoverPageModule, AddTaskPopoverPageModule, QrcodeDetectedPopoverPageModule,
   JwtModule.forRoot({
     jwtOptionsProvider: {
       provide: JWT_OPTIONS,
@@ -44,6 +48,8 @@ export function jwtOptionsFactory(storage) {
   providers: [
     StatusBar,
     SplashScreen,
+    BarcodeScanner,
+    QRScanner,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -10,6 +10,7 @@ const routes: Routes = [
     loadChildren: './pages/private/tabs/tabs.module#TabsPageModule',
     canActivate: [AuthGuardService]
   }
+
 ];
  
 @NgModule({

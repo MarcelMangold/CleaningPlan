@@ -44,7 +44,7 @@ router.post('/addTask', task.addTask)
 
 app.use('/api', router);
 
-app.listen(port, function () {
+app.listen(port, '192.168.178.58', function () {
 
     console.log('Web server listening on localhost:' + port);
 
