@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
+import { DatabaseService } from 'src/app/services/database.service';
 
 @Component({
     selector: 'app-shopping-list',
@@ -20,17 +21,17 @@ export class ShoppingListPage implements OnInit {
     url = environment.url;
     item;
     toast;
-    constructor(public toastController: ToastController, private popoverController: PopoverController, private storage: Storage, private http: HttpClient, private authService: AuthService) { }
+    constructor(public toastController: ToastController, private popoverController: PopoverController,
+        private storage: Storage, private http: HttpClient, private authService: AuthService,
+        private databaseService: DatabaseService) { }
 
     ngOnInit() {
         this.storage.get('username').then((data) => { this.user = data });
         this.getAllItem();
     }
 
-    itemCheckboxEvent(item)
-    {
-        if(item.finished)
-        {
+    itemCheckboxEvent(item) {
+        if (item.finished) {
             this.removeItem(item.item_id);
             item.finished_by = this.user;
             item.finished_at = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -67,7 +68,7 @@ export class ShoppingListPage implements OnInit {
         popover.onDidDismiss().then((dataReturned) => {
             if (dataReturned !== null) {
                 if (dataReturned.data != undefined) {
-                    var newItem = new Item(null,dataReturned.data, null, this.user, new Date().toISOString().slice(0, 19).replace('T', ' '), null, false)
+                    var newItem = new Item(null, dataReturned.data, null, this.user, new Date().toISOString().slice(0, 19).replace('T', ' '), null, false)
                     this.shoppingList.unshift(newItem);
                     this.addItem(newItem);
                 }
@@ -81,7 +82,7 @@ export class ShoppingListPage implements OnInit {
     getAllItem() {
         this.http.get(`${this.url}/api/getItems`).subscribe(resp => {
             if (resp['results']) {
-              this.shoppingList = resp['results'];
+                this.shoppingList = resp['results'];
             }
             else {
                 this.showToast(resp['message'], "danger");
@@ -90,33 +91,29 @@ export class ShoppingListPage implements OnInit {
         });
     }
 
-    addItem(newItem: Item) {
-        this.http.post(`${this.url}/api/addItem`, newItem).subscribe(resp => {
-            if (!resp['success']) 
-                this.showToast(resp['message'], "danger");
-            else
-                this.shoppingList[0].item_id = resp['insertId'];
-        });
+    async addItem(newItem: Item) {
+        await this.databaseService.addItem(newItem)
+            .then(result =>
+                this.shoppingList[0].item_id = result['insertId'])
+            .catch(error =>
+                this.showToast(error['message'], error['color']));
     }
 
-    removeItem(id:number)
-    {
+    removeItem(id: number) {
         this.shoppingList.forEach(async (element, index) => {
-            if(element.item_id === id)
-            {
+            if (element.item_id === id) {
                 await new Promise(resolve => setTimeout(resolve, 250));
-                this.shoppingList.splice(index,1);
+                this.shoppingList.splice(index, 1);
             }
-              
+
         });
     }
 
-    updateItem(item:Item)
-    {
+    updateItem(item: Item) {
         this.http.post(`${this.url}/api/updateItem`, item).subscribe(resp => {
-            if (!resp['success']) 
+            if (!resp['success'])
                 this.showToast(resp['message'], "danger");
-                 
+
         });
     }
 
