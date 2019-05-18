@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { PopoverController, ToastController } from '@ionic/angular';
+import { ToastController, ModalController } from '@ionic/angular';
 import { AddTaskPopoverPage } from '../add-task-popover/add-task-popover.page';
 import { Storage } from '@ionic/storage';
 import { environment } from '../../../../environments/environment';
@@ -22,9 +22,9 @@ export class HomePage implements OnInit {
     user_id: number;
     toast;
     url = environment.url;
-  
 
-    constructor(protected loading: LoadingService, private loadingController: LoadingController, private authService: AuthService, private http: HttpClient, private popoverController: PopoverController, private storage: Storage, private toastController: ToastController) {
+
+    constructor(protected loading: LoadingService, private loadingController: LoadingController, private authService: AuthService, private http: HttpClient, private modalController: ModalController, private storage: Storage, private toastController: ToastController) {
     }
 
 
@@ -36,73 +36,73 @@ export class HomePage implements OnInit {
 
         this.http.get('assets/information.json').subscribe(async res => {
             this.information = res['items'];
-            await this.delay(800);
             this.information[0].open = true;
             this.loading.dismiss('HomePage.ngOnInit');
         });
     }
 
     ngOnInit() {
+    }
+
+    async openAddTaskPopover() {
+        const popover = await this.modalController.create({
+            component: AddTaskPopoverPage,
+            componentProps: {
+
+            },
+            cssClass: 'pop-over-style-add-task'
+        });
+
+        popover.onDidDismiss().then((dataReturned) => {
+            if (dataReturned !== null) {
+                if (dataReturned.data != undefined) {
+                    dataReturned.data.user_id = this.user_id;
+                    console.log(JSON.stringify(dataReturned.data));
+                    this.addTaskToDatabase(dataReturned.data).then( () =>  this.showToast("erfolgreich", "success", "top"))
+                    .catch( error =>  this.showToast(error, "danger", "top"));
+                }
             }
-    
-    delay(ms: number) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
+        });
 
-    async openAddTaskPopover(ev: Event) {
-                const popover = await this.popoverController.create({
-                    component: AddTaskPopoverPage,
-                    componentProps: {
+        return await popover.present();
 
-                    },
-                    cssClass: 'pop-over-style-add-task',
-                    event: ev
-                });
-
-                popover.onDidDismiss().then((dataReturned) => {
-                    if (dataReturned !== null) {
-                        if (dataReturned.data != undefined) {
-                            dataReturned.data.user_id = this.user_id;
-                            console.log(JSON.stringify(dataReturned.data));
-                            this.addTaskToDatabase(dataReturned.data);
-                        }
-                    }
-                });
-
-                return await popover.present();
-
-            }
+    }
 
     addTaskToDatabase(task) {
-                this.http.post(`${this.url}/api/addTask`, task).subscribe(resp => {
-                    if (!resp['success']) {
-                        this.showToast(resp['message'], "danger", "top");
-                    }
-                    // this.getEventsFromDatabase();
-                });
-            }
+        return new Promise((resolve, reject) => {
+            this.http.post(`${this.url}/api/addTask`, task, {observe: 'response'}).subscribe(resp => {
+                if (resp.status === 200) {
+                    this.showToast("erfolgreich", "success", "top");
+                    resolve()
+                }
+          
+            }, error => {
+                reject(error);
+            });
+        });
+    }
 
 
     showToast(message, color, position) {
-                this.toast = this.toastController.create({
-                    message: message,
-                    duration: 2000,
-                    showCloseButton: true,
-                    position: position,
-                    closeButtonText: 'OK',
-                    color: color
-                }).then((toastData) => {
-                    toastData.present();
-                });
-            }
+        this.toast = this.toastController.create({
+            message: message,
+            duration: 2000,
+            showCloseButton: true,
+            position: position,
+            closeButtonText: 'OK',
+            color: color
+        }).then((toastData) => {
+            toastData.present();
+        });
+    }
     HideToast() {
-                this.toast = this.toastController.dismiss();
-            }
+        this.toast = this.toastController.dismiss();
+    }
 
     toogleSection(index) {
-                this.information[index].open = !this.information[index].open;
+        this.information[index].open = !this.information[index].open;
 
-                if(this.automaticClose && this.information[index].open) {
+        if (this.automaticClose && this.information[index].open) {
             this.information
                 .filter((item, itemIndex) => itemIndex != index)
                 .map(item => item.open = false);

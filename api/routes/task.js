@@ -9,20 +9,55 @@ var connection = mysql.createConnection({
 });
 
 async function addTask(req, res, next) {
-    let task = req.body;
-    let query =
-        "INSERT INTO `cleaningplandb`.`tasks` ( `task_name`, `duration`,  `finished_on`, `time_period`, `timestamp`,  `user_id`)   VALUES ('" +
-        task.taskName + "', " + task.duration + "," + task.finishedOn + "," + task.timePeriod + ",'" + new Date().toISOString().slice(0, 19).replace('T', ' ') + "'," + task.user_id + ");";
-    connection.query(query, function (err, results, fields) {
-        if (err) {
-            console.log(err);
-            res.send({ success: false, message: 'database error by creating item', error: err });
-            return;
+
+    addTaskDetail(req.body).then(async result => {
+        if (req.body.startDate == null) {
+            await addTasktoDatabase(req.body, result.insertId);
+            res.status(200).send({ insertId: result.insertId });
         }
-        res.send({ success: true, insertId: results.insertId });
-        return;
+        /*  else {
+             res.status(200).send({ insertId: result.insertId });
+         } */
+    }).catch(error => {
+        console.log(error)
+        res.status(500).send({ message: 'database error by creating item', error: error })
+    })
+}
 
+function addTaskDetail(task) {
+    return new Promise(function (resolve, reject) {
 
+        let query =
+            "INSERT INTO `cleaningplandb`.`task_detail` ( `task_name`, `duration`,`time_period`,`finished_on`,`created_on`,`start_date`, `fk_responsibility`,`fk_created_by`)"
+            + " VALUES ('" + task.taskName + "', " + task.duration + "," + task.timePeriod + "," + task.finishedOn + ",'" + new Date().toISOString().slice(0, 19).replace('T', ' ')
+            + "'," + task.startDate + "," + task.responsibility + "," + task.user_id + ")";
+        connection.query(query, function (err, results, fields) {
+            if (err) {
+                console.log(err);
+                reject(error);
+            }
+            resolve(results)
+        });
+    });
+
+}
+
+function addTasktoDatabase(task, insertId) {
+    return new Promise(function (resolve, reject) {
+        var finishedOn = new Date();
+        finishedOn.setDate(finishedOn.getDate() + (task.finishedOn + 8 - finishedOn.getDay()) % 7);
+        
+
+        let query = "INSERT INTO `cleaningplandb`.`task` (`state`,`finished_at`,`fk_finished_by`,`fk_task_detail_id`)"
+            + "VALUES (" + 0 + ",'" + finishedOn.toISOString().slice(0, 19).replace('T', ' ') + "'," + task.responsibility + "," + insertId + ")";
+
+        connection.query(query, function (err, results, fields) {
+            if (err) {
+                console.log(err);
+                reject(err);
+            }
+            resolve(results)
+        });
     });
 
 }

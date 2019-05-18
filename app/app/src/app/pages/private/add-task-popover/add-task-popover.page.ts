@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TimeoutError } from 'rxjs';
-import { PopoverController } from '@ionic/angular';
+import {  ModalController } from '@ionic/angular';
 
 @Component({
     selector: 'app-add-task-popover',
@@ -16,14 +15,13 @@ export class AddTaskPopoverPage implements OnInit {
         duration: 1,
         timePeriod: 1,
         finishedOn: 0,
-        created_on: null,
         startDate: null,
         responsibility: null,
         createdBy: null,
     }
     weekdays = [true, false, false, false, false, false, false];
     
-    constructor(private popoverController: PopoverController) { }
+    constructor(private modalController: ModalController) { }
 
     ngOnInit() {
     }
@@ -38,11 +36,13 @@ export class AddTaskPopoverPage implements OnInit {
 
     }
 
-    async closePopover(saved) {
+    async closePopover(saved:boolean) {
         if (saved)
-            await this.popoverController.dismiss(this.task);
+        {
+            await this.modalController.dismiss(this.task);
+        }
         else
-            await this.popoverController.dismiss(undefined);
+            await this.modalController.dismiss(undefined);
     }
 
 
