@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage';
 import { environment } from '../../../../environments/environment';
 import { LoadingController } from '@ionic/angular';
 import { LoadingService } from 'src/app/services/loading.service';
-import { start } from 'repl';
+
 
 
 @Component({
@@ -22,6 +22,7 @@ export class HomePage implements OnInit {
     user_id: number;
     toast;
     url = environment.url;
+  
 
     constructor(protected loading: LoadingService, private loadingController: LoadingController, private authService: AuthService, private http: HttpClient, private popoverController: PopoverController, private storage: Storage, private toastController: ToastController) {
     }

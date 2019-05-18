@@ -1,34 +1,34 @@
 .m_checkbox{
-    --background:url(../../../../../www/assets/icon/checkbox/icon_m.svg) ;
+    --background:url(../../../../assets/icon/checkbox/icon_m.svg) ;
     --height : 25px;
     --width: 25px;
     --border-color :#FFFFFF;
     --checkmark-color:rgba(0, 0, 0, 0);
-    --background-checked:url(../../../../../www/assets/icon/checkbox/icon_checked_m.svg);
+    --background-checked:url(../../../../assets/icon/checkbox/icon_checked_m.svg);
     --border-color-checked :#FFFFFF;
     display: flex;
     align-items: center;
    }
 
    .d_checkbox{
-    --background:url(../../../../../www/assets/icon/checkbox/icon_d.svg) ;
+    --background:url(../../../../assets/icon/checkbox/icon_checked_d.svg) ;
     --height : 25px;
     --width: 25px;
     --border-color :#FFFFFF;
     --checkmark-color:rgba(0, 0, 0, 0);
-    --background-checked:url(../../../../../www/assets/icon/checkbox/icon_checked_d.svg);
+    --background-checked:url(../../../../assets/icon/checkbox/icon_checked_d.svg);
     --border-color-checked :#FFFFFF;
     display: flex;
     align-items: center;
   }
 
   .f_checkbox{
-    --background:url(../../../../../www/assets/icon/checkbox/icon_f.svg) ;
+    --background:url(../../../../assets/icon/checkbox/icon_f.svg) ;
     --height : 25px;
     --width: 25px;
     --border-color :#FFFFFF;
     --checkmark-color:rgba(0, 0, 0, 0);
-    --background-checked:url(../../../../../www/assets/icon/checkbox/icon_checked_f.svg);
+    --background-checked:url(../../../../assets/icon/checkbox/icon_checked_f.svg);
     --border-color-checked :#FFFFFF;
     display: flex;
     align-items: center;
@@ -36,12 +36,12 @@
 
 
   .s_checkbox{
-    --background:url(../../../../../www/assets/icon/checkbox/icon_s.svg) ;
+    --background:url(../../../../assets/icon/checkbox/icon_s.svg) ;
     --height : 25px;
     --width: 25px;
     --border-color :#FFFFFF;
     --checkmark-color:rgba(0, 0, 0, 0);
-    --background-checked:url(../../../../../www/assets/icon/checkbox/icon_checked_s.svg);
+    --background-checked:url(../../../../assets/icon/checkbox/icon_checked_s.svg);
     --border-color-checked :#FFFFFF;
     display: flex;
     align-items: center;

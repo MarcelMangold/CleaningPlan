@@ -20,7 +20,7 @@
                         <ion-input [(ngModel)]="task.timePeriod" type="number" value="1"></ion-input>
                     </ion-col>
                     <ion-col size="10">
-                        <ion-select [(ngModel)]="task.duration" placeholder="Select One"  >
+                        <ion-select [(ngModel)]="task.duration" placeholder="Select One">
                             <ion-select-option value="0">Day</ion-select-option>
                             <ion-select-option value="1">Week</ion-select-option>
                             <ion-select-option value="2">Month</ion-select-option>
@@ -62,6 +62,42 @@
                     </ion-grid>
                 </ion-col>
             </ion-grid>
+        </ion-item>
+        <ion-item>
+            <ion-label>Extended option:</ion-label>
+            <ion-checkbox [(ngModel)]="isExtendedOptionActive"></ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+                    <ion-list *ngIf="isExtendedOptionActive">
+                        <ion-item>
+                            <ion-grid>
+                                <ion-row no-padding>
+                                    <ion-col size="12">
+                                        <ion-label>Start at:</ion-label>
+                                    </ion-col>
+                                    <ion-col size="12">
+                                        <ion-datetime display-format="DD.MM.YYYY" picker-format="DD.MM.YYYY"></ion-datetime>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-item>
+                        <ion-item>
+                            <ion-grid>
+                                <ion-row no-padding>
+                                    <ion-col size="12">
+                                        <ion-label>Task finished at:</ion-label>
+                                    </ion-col>
+                                    <ion-col size="12">
+                                        <ion-datetime display-format="DD.MM.YYYY" picker-format="DD.MM.YYYY"></ion-datetime>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>Responsibility:</ion-label>
+                            <ion-input [(ngModel)]="task.responsibility"></ion-input>
+                        </ion-item>
+                    </ion-list>
         </ion-item>
         <ion-item padding>
             <ion-button class="save_button" fill="clear" slot="start" (click)="closePopover(true)">Save</ion-button>

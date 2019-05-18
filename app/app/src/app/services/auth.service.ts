@@ -14,7 +14,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
  
-  url = environment.url;
+  url:string = environment.url;
   user = null;
   authenticationState = new BehaviorSubject(false);
  

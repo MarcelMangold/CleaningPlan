@@ -9,11 +9,17 @@ import { PopoverController } from '@ionic/angular';
 })
 export class AddTaskPopoverPage implements OnInit {
 
+    isExtendedOptionActive:boolean = false;
+
     task = {
         taskName: "clean kitchen",
-        timePeriod: 1,
         duration: 1,
-        finishedOn: 0
+        timePeriod: 1,
+        finishedOn: 0,
+        created_on: null,
+        startDate: null,
+        responsibility: null,
+        createdBy: null,
     }
     weekdays = [true, false, false, false, false, false, false];
     
