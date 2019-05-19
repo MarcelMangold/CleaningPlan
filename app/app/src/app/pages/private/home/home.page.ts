@@ -15,6 +15,8 @@ import { LoadingService } from 'src/app/services/loading.service';
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
+
+
 export class HomePage implements OnInit {
 
     loaderToShow: any;
@@ -22,6 +24,8 @@ export class HomePage implements OnInit {
     user_id: number;
     toast;
     url = environment.url;
+    alltasks = [];
+
 
 
     constructor(protected loading: LoadingService, private loadingController: LoadingController, private authService: AuthService, private http: HttpClient, private modalController: ModalController, private storage: Storage, private toastController: ToastController) {
@@ -31,19 +35,72 @@ export class HomePage implements OnInit {
     information: any[];
 
     async ionViewWillEnter() {
-        await this.loading.present('HomePage.ngOnInit', 'Loading messages...');
+
         this.storage.get('user_id').then((data) => { this.user_id = data });
 
         this.http.get('assets/information.json').subscribe(async res => {
             this.information = res['items'];
             this.information[0].open = true;
-            this.loading.dismiss('HomePage.ngOnInit');
+
         });
+        this.getCurrentTaks();
+
     }
+
+    getNextMonday() {
+        var nextMonday = new Date();
+        nextMonday.setDate(nextMonday.getDate() + (1 + 7 - nextMonday.getDay()) % 7);
+        return nextMonday;
+    }
+
+
+
 
     ngOnInit() {
     }
 
+
+    async getCurrentTaks() {
+        this.alltasks = [];
+        await this.loading.present('HomePage.ngOnInit', 'Loading messages...');
+        this.http.post(`${this.url}/api/currentTask`, { userId: this.user_id }, { observe: 'response' }).subscribe(resp => {
+            if (resp.status === 200) {
+                let thisWeekTasks;
+                let thisNextWeeksTasks;
+                let thisNextWeekTask = [];
+                let thisWeekTask = [];
+
+                let nextMonday = this.getNextMonday();
+                resp.body['tasks'].forEach(element => {
+                    if (new Date(element.finished_at) > nextMonday)
+                        thisNextWeekTask.push(element);
+                    else
+                        thisWeekTask.push(element);
+                    element.finished = false;
+
+                });
+
+                thisWeekTasks = {
+                    name: "This week",
+                    tasks: thisWeekTask
+                }
+
+                thisNextWeeksTasks = {
+                    name: "Next weeks",
+                    tasks: thisNextWeekTask
+                }
+
+                this.alltasks.push(thisWeekTasks);
+                this.alltasks.push(thisNextWeeksTasks);
+            }
+            this.loading.dismiss('HomePage.ngOnInit');
+
+        }, error => {
+            this.loading.dismiss('HomePage.ngOnInit');
+            this.showToast(error, "danger", "top");
+        });
+
+    }
     async openAddTaskPopover() {
         const popover = await this.modalController.create({
             component: AddTaskPopoverPage,
@@ -57,9 +114,12 @@ export class HomePage implements OnInit {
             if (dataReturned !== null) {
                 if (dataReturned.data != undefined) {
                     dataReturned.data.user_id = this.user_id;
-                    console.log(JSON.stringify(dataReturned.data));
-                    this.addTaskToDatabase(dataReturned.data).then( () =>  this.showToast("erfolgreich", "success", "top"))
-                    .catch( error =>  this.showToast(error, "danger", "top"));
+                    this.addTaskToDatabase(dataReturned.data).then(() => {
+                        this.getCurrentTaks();
+                        this.showToast("erfolgreich", "success", "top");
+                    }
+                    )
+                        .catch(error => this.showToast(error, "danger", "top"));
                 }
             }
         });
@@ -70,12 +130,12 @@ export class HomePage implements OnInit {
 
     addTaskToDatabase(task) {
         return new Promise((resolve, reject) => {
-            this.http.post(`${this.url}/api/addTask`, task, {observe: 'response'}).subscribe(resp => {
+            this.http.post(`${this.url}/api/addTask`, task, { observe: 'response' }).subscribe(resp => {
                 if (resp.status === 200) {
                     this.showToast("erfolgreich", "success", "top");
                     resolve()
                 }
-          
+
             }, error => {
                 reject(error);
             });
@@ -100,17 +160,17 @@ export class HomePage implements OnInit {
     }
 
     toogleSection(index) {
-        this.information[index].open = !this.information[index].open;
+        this.alltasks[index].open = !this.alltasks[index].open;
 
-        if (this.automaticClose && this.information[index].open) {
-            this.information
+        if (this.automaticClose && this.alltasks[index].open) {
+            this.alltasks
                 .filter((item, itemIndex) => itemIndex != index)
                 .map(item => item.open = false);
         }
     }
 
     tooglesSection(index, childIndex) {
-        this.information[index].children[childIndex].open = !this.information[index].children[childIndex].open;
+        this.alltasks[index].tasks[childIndex].open = !this.alltasks[index].tasks[childIndex].open;
     }
 
 

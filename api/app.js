@@ -41,6 +41,8 @@ router.post('/login', logins.post);
 router.post('/updateItem', item.updateItem)
 router.post('/addEvent', event.addEvent)
 router.post('/addTask', task.addTask)
+router.post('/currentTask', task.currentTask)
+
 
 app.use('/api',  router);
 

@@ -12,20 +12,20 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-list *ngFor="let item of information; let i = index;" class="accordion-list" lines="none" detail="false" no-padding>
+    <ion-list *ngFor="let item of alltasks; let i = index;" class="accordion-list" lines="none" detail="false" no-padding>
         <ion-item tappable (click)="toogleSection(i)" [ngClass]="{'section-active': item.open, 'section':!item.open}">
             <ion-icon slot="start" name="arrow-forward" *ngIf="!item.open"></ion-icon>
             <ion-icon slot="start" name="arrow-down" *ngIf="item.open"></ion-icon>
             <ion-label>{{item.name}}</ion-label>
-            <ion-badge slot="end" color="medium">{{item.children.length}}</ion-badge>
+            <ion-badge slot="end" color="medium">{{item.tasks.length}}</ion-badge>
         </ion-item>
 
-        <div *ngIf="item.open && item.children" no-padding>
-            <ion-list *ngFor="let child of item.children; let j = index;" lines="none" detail="false" class="child-list">
+        <div *ngIf="item.open && item.tasks" no-padding>
+            <ion-list *ngFor="let child of item.tasks; let j = index;" lines="none" detail="false" class="child-list">
                 <ion-item>
-                    <ion-label slot="start">{{item.children[j].name}}</ion-label>
-                    <ion-label>{{item.children[j].date}}</ion-label>
-                    <ion-checkbox [(ngModel)]="item.finished" slot="end"></ion-checkbox>
+                    <ion-label slot="start">{{child.task_name}}</ion-label>
+                    <ion-label>{{child.finished_at | date: 'dd.MM.yyyy'}}</ion-label>
+                    <ion-checkbox [(ngModel)]="child.finished" slot="end"></ion-checkbox>
                 </ion-item>
             </ion-list>
         </div>
@@ -36,7 +36,7 @@
 </ion-content>
 
 <ion-footer>
-        <ion-button (click)="openAddTaskPopover($event)" color="medium" expand="full">
-            <ion-icon name="add"></ion-icon>
-        </ion-button>
-    </ion-footer>
+    <ion-button (click)="openAddTaskPopover($event)" color="medium" expand="full">
+        <ion-icon name="add"></ion-icon>
+    </ion-button>
+</ion-footer>

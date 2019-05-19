@@ -24,6 +24,8 @@ async function addTask(req, res, next) {
     })
 }
 
+
+
 function addTaskDetail(task) {
     return new Promise(function (resolve, reject) {
 
@@ -46,7 +48,7 @@ function addTasktoDatabase(task, insertId) {
     return new Promise(function (resolve, reject) {
         var finishedOn = new Date();
         finishedOn.setDate(finishedOn.getDate() + (task.finishedOn + 8 - finishedOn.getDay()) % 7);
-        
+
 
         let query = "INSERT INTO `cleaningplandb`.`task` (`state`,`finished_at`,`fk_finished_by`,`fk_task_detail_id`)"
             + "VALUES (" + 0 + ",'" + finishedOn.toISOString().slice(0, 19).replace('T', ' ') + "'," + task.responsibility + "," + insertId + ")";
@@ -62,6 +64,33 @@ function addTasktoDatabase(task, insertId) {
 
 }
 
+async function currentTask(req, res, next) {
+    getCurrentTask()
+        .then(result => {
+            res.status(200).send({ tasks: result });
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(500).send({ message: 'database error by creating item', error: error })
+        })
+}
+
+function getCurrentTask() {
+    return new Promise(function (resolve, reject) {
+        let query = 'SELECT task.task_id, task.finished_at  , task_detail.task_name,task.state'
+            + " FROM cleaningplandb.task task join cleaningplandb.task_detail task_detail on task.fk_task_detail_id = task_detail.task_detail_id"
+            + " WHERE state != 1 ;"
+
+        connection.query(query, function (err, results, fields) {
+            if (err) {
+                console.log(err);
+                reject(err);
+            }
+            resolve(results)
+        });
+    });
+
+}
 
 
 
@@ -104,23 +133,8 @@ function updateEvent(req, res, next) {
 }
 
 module.exports.addTask = addTask;
+module.exports.currentTask = currentTask;
 module.exports.getEvents = getEvents;
 module.exports.updateEvent = updateEvent;
 
 
-
-
-
-
-/* CREATE TABLE `cleaningplandb`.`task_information` (
-    `task_information_id` INT NOT NULL,
-    `duration` INT NOT NULL,
-    `monday` TINYINT NOT NULL,
-    `tuesday` TINYINT NOT NULL,
-    `wednesday` TINYINT NOT NULL,
-    `thursday` TINYINT NOT NULL,
-    `friday` TINYINT NOT NULL,
-    `saturday` TINYINT NOT NULL,
-    `sunday` TINYINT NOT NULL,
-    PRIMARY KEY (`task_information_id`));
- */
