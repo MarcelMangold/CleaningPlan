@@ -9,7 +9,8 @@ var connection = mysql.createConnection({
 });
 
 function addItem(req, res, next) {
-
+    console.log(req.body)
+    
     let item = req.body;
     var query = "INSERT INTO `cleaningplandb`.`shopping_list`"
         + "( `item_name`,  `created_by`, `created_at`, `finished`)" +
@@ -29,7 +30,6 @@ function addItem(req, res, next) {
 }
 
 function getItems(req, res, next) {
-
     var query = "SELECT * FROM cleaningplandb.shopping_list WHERE finished = false;"
     connection.query(query, function (err, results, fields) {
         if (err) {
@@ -37,7 +37,7 @@ function getItems(req, res, next) {
             res.send({ success: false, message: 'database error by reading items', error: err });
             return;
         }
-
+        console.log(results)
         res.send({ results });
         return;
     });

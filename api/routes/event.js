@@ -9,7 +9,7 @@ var connection = mysql.createConnection({
 });
 
 function addEvent(req, res, next) {
-
+    console.log(req.body);
     let event = req.body;
     var query = "INSERT INTO `cleaningplandb`.`events` ( `event_name`, `description`,  `start_time`, `end_time`, `all_day`, `user_id`)" + 
     " VALUES " + 

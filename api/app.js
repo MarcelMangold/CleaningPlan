@@ -51,3 +51,5 @@ app.listen(port, 'localhost', function () {
     console.log('Web server listening on localhost:' + port);
 
 });
+
+module.exports = app;
