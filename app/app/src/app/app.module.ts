@@ -17,6 +17,8 @@ import { AddEventPopoverPageModule } from './pages/private/add-event-popover/add
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AddTaskPopoverPageModule } from './pages/private/add-task-popover/add-task-popover.module';
+
+
  
 export function jwtOptionsFactory(storage) {
   return {

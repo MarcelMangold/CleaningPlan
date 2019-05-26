@@ -12,6 +12,14 @@
 </ion-header>
 
 <ion-content padding>
+
+    <ion-progress-bar class="statusbar" value="0.25" buffer="0.25">
+        20
+    </ion-progress-bar>
+
+    <progress-bar class="statusbar" style="border-radius: 0px !important;" [progress]="result" [color-degraded]="{'0': '#00cbcb',  '15': '#f9c3d3', '25': '#ff8aff'}" [color]="'#ff8aff'">
+        </progress-bar>
+
     <ion-list *ngFor="let item of alltasks; let i = index;" class="accordion-list" lines="none" detail="false" no-padding>
         <ion-item tappable (click)="toogleSection(i)" [ngClass]="{'section-active': item.open, 'section':!item.open}">
             <ion-icon slot="start" name="arrow-forward" *ngIf="!item.open"></ion-icon>

@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
     toast;
     url = environment.url;
     alltasks = [];
-
+    result = 0;
 
 
     constructor(protected loading: LoadingService, private loadingController: LoadingController, private authService: AuthService, private http: HttpClient, private modalController: ModalController, private storage: Storage, private toastController: ToastController) {
@@ -37,6 +37,9 @@ export class HomePage implements OnInit {
     async ionViewWillEnter() {
 
         this.storage.get('user_id').then((data) => { this.user_id = data });
+
+
+        this.result =19/30*100;
 
         this.http.get('assets/information.json').subscribe(async res => {
             this.information = res['items'];

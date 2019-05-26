@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgCalendarModule  } from 'ionic2-calendar';
+import {ProgressBarModule} from "angular-progress-bar"
 
 import { HomePage } from './home.page';
 
@@ -13,6 +14,7 @@ import { HomePage } from './home.page';
     NgCalendarModule,
     FormsModule,
     IonicModule,
+    ProgressBarModule,
     RouterModule.forChild([
       {
         path: '',

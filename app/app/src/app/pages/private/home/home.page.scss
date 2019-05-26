@@ -13,6 +13,24 @@ ion-content{
    
 }
 
+.statusbar progress-bar{
+    
+    width: 96%;
+    margin: 10px 2%;
+    padding: 3px;
+    background-color: #ffffff !important;
+    border: 1px solid #dcdcdc;
+    color: #fff;
+    text-align: center;
+  }
+  .progress-inner[_ngcontent-c4] {
+    min-width: 15%;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0px;
+  }
+
+
 .section{
     --ion-item-background: #ffffff;
     --ion-item-color: #000000;
