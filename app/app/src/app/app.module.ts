@@ -5,11 +5,12 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
- 
+
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
  
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Storage, IonicStorageModule } from '@ionic/storage';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { AddPopoverPageModule } from './pages/private/add-popover/add-popover.module';
@@ -17,6 +18,8 @@ import { AddEventPopoverPageModule } from './pages/private/add-event-popover/add
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AddTaskPopoverPageModule } from './pages/private/add-task-popover/add-task-popover.module';
+
+import { HttpConfigInterceptor} from './providers/jwt.interceptor';
 
 
  
@@ -46,7 +49,7 @@ export function jwtOptionsFactory(storage) {
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

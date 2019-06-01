@@ -5,7 +5,6 @@ function auth(role) {
     return function(req, res, next) {
         var token;
         var payload;
-    
         if (!req.headers.authorization) {
             return res.status(401).send({message: 'Du bist dafür nicht authentifiziert'});
         }

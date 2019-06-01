@@ -32,16 +32,16 @@ router = express.Router();
 
 router.get('/api', api.get);
 router.get('/public_things', publicThings.get);
-router.get('/protected_things', auth(), protectedThings.get);
-router.get('/getItems', item.getItems);
-router.get('/getEvents', event.getEvents);
+router.get('/protected_things',  protectedThings.get);
+router.get('/getItems',  auth(),item.getItems);
+router.get('/getEvents', auth(),event.getEvents);
 router.post('/users', users.post);
-router.post('/addItem', item.addItem);
+router.post('/addItem', auth(), item.addItem);
 router.post('/login', logins.post);
-router.post('/updateItem', item.updateItem)
-router.post('/addEvent', event.addEvent)
-router.post('/addTask', task.addTask)
-router.post('/currentTask', task.currentTask)
+router.post('/updateItem',  auth(),item.updateItem)
+router.post('/addEvent', auth(), event.addEvent)
+router.post('/addTask', auth(), task.addTask)
+router.post('/currentTask', auth(), task.currentTask)
 
 
 app.use('/api',  router);
