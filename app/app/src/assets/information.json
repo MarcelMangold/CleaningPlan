@@ -1,0 +1,30 @@
+{
+    "items":
+    [
+        {
+            "name":"This week",
+            "children":[
+                {
+                    "name":"Bad Putzen",
+                    "date": "27.04.2019"
+                }
+            ]
+        },
+        {
+            "name":"Next weeks",
+            "children":[
+                {
+                    "name":"Küche putzen",
+                    "date": "03.05.2019"
+                },
+                {
+                    "name":"Küche putzen",
+                    "date": "03.05.2019"
+                }
+            ]
+        }
+ 
+ 
+        
+    ]
+}

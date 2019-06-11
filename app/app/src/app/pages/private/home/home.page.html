@@ -11,34 +11,32 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-toolbar color="primary">
+<ion-content padding>
+    <ion-list *ngFor="let item of alltasks; let i = index;" class="accordion-list" lines="none" detail="false" no-padding>
+        <ion-item tappable (click)="toogleSection(i)" [ngClass]="{'section-active': item.open, 'section':!item.open}">
+            <ion-icon slot="start" name="arrow-forward" *ngIf="!item.open"></ion-icon>
+            <ion-icon slot="start" name="arrow-down" *ngIf="item.open"></ion-icon>
+            <ion-label>{{item.name}}</ion-label>
+            <ion-badge slot="end" color="medium">{{item.tasks.length}}</ion-badge>
+        </ion-item>
 
-        <ion-buttons slot="start">
-            <button ion-button (click)="changeMode('day')">Tag</button>
-            <button ion-button (click)="changeMode('week')">Woche</button>
-            <button ion-button (click)="changeMode('month')">Monat</button>
-        </ion-buttons>
-        <ion-title>{{viewTitle}}</ion-title>
-        <ion-buttons slot="end">
-            <button ion-button [disabled]="isToday" (click)="today()">Heutiger Tag</button>
-            <button ion-button icon-only (click)="addEvent()">
-                <ion-icon name="add-circle-outline"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-toolbar>
-    <calendar 
-    [dateFormatter]="calendar.dateFormatter" 
-    [eventSource]="eventSource" 
-    [calendarMode]="calendar.mode"
-    [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)"  allDayLabel="ganztags"
-    (onRangeChanged)="reloadSource(startTime, endTime)"
-     (onEventSelected)="onEventSelected($event)"
-      (onTitleChanged)="onViewTitleChanged($event)"
-       (onTimeSelected)="onTimeSelected($event)" step="30" [scrollToHour]="currentHour" preserveScrollPosition=true
-       >
+        <div *ngIf="item.open && item.tasks" no-padding>
+            <ion-list *ngFor="let child of item.tasks; let j = index;" lines="none" detail="false" class="child-list">
+                <ion-item>
+                    <ion-label slot="start">{{child.task_name}}</ion-label>
+                    <ion-label>{{child.finished_at | date: 'dd.MM.yyyy'}}</ion-label>
+                    <ion-checkbox [(ngModel)]="child.finished" slot="end"></ion-checkbox>
+                </ion-item>
+            </ion-list>
+        </div>
 
-    </calendar>
 
+    </ion-list>
 
 </ion-content>
+
+<ion-footer>
+    <ion-button (click)="openAddTaskPopover($event)" color="medium" expand="full">
+        <ion-icon name="add"></ion-icon>
+    </ion-button>
+</ion-footer>

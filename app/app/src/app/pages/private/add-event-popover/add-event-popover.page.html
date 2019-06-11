@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title *ngIf="add == true">New event</ion-title>
+        <ion-title *ngIf="add == false">{{event.title}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list lines="none" detail="none">
+        <ion-item *ngIf="add == true">
+            <ion-input type="text" placeholder="Title" [(ngModel)]="event.title"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="add == false">
+            <ion-input type="text" placeholder="{{event.desc}}" [(ngModel)]="event.desc"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="add == true"> 
+            <ion-input type="text" placeholder="Beschreibung" [(ngModel)]="event.desc"></ion-input>
+        </ion-item>
+        <ion-item>
+            Start
+            <ion-datetime picker-format="MMMM YYYY"  display-format="MMM DD, YYYY HH:mm" [(ngModel)]="event.startTime" placeholder="{{event.startTime}}"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            End
+            <ion-datetime  picker-format="MMMM YYYY" displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="event.endTime" placeholder="{{event.endTime}}"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            <ion-label>All Day?</ion-label>
+            <ion-checkbox [(ngModel)]="event.all_day"></ion-checkbox>
+        </ion-item>
+        <ion-item>
+            <ion-toolbar>
+                <ion-button slot="start" (click)="closePopover(true)" color="success">Save</ion-button>
+                <ion-button slot="end" (click)="closePopover(false)" color="danger">Abort</ion-button>
+            </ion-toolbar>
+        </ion-item>
+    </ion-list>
+</ion-content>

@@ -14,7 +14,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
  
-  url = environment.url;
+  url:string = environment.url;
   user = null;
   authenticationState = new BehaviorSubject(false);
  
@@ -55,7 +55,8 @@ export class AuthService {
       .pipe(
         tap(res => {
           this.storage.set(environment.jwt_encryption, res['token']);
-          this.storage.set('username', credentials.username)
+          this.storage.set('username', credentials.username);
+          this.storage.set('user_id', res['user'].id );
           this.user = this.helper.decodeToken(res['token']);
           this.authenticationState.next(true);
         }),
@@ -71,7 +72,10 @@ export class AuthService {
     this.storage.remove(environment.jwt_encryption).then(() => {
       this.authenticationState.next(false);
     });
+    window.location.reload(true)
   }
+
+
  
   getSpecialData() {
     return this.http.get(`${this.url}/api/protected_things`).pipe(

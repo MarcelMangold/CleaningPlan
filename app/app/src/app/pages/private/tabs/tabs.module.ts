@@ -28,6 +28,10 @@ const routes: Routes = [
                 loadChildren: '../shopping-list/shopping-list.module#ShoppingListPageModule'
             },
             {
+                path: 'calendar',
+                loadChildren: '../calendar/calendar.module#CalendarPageModule'
+            },
+            {
                 path: '',
                 redirectTo: '/tabs/home',
                 pathMatch: 'full'

@@ -1,0 +1,35 @@
+ion-content{
+    --background: var(--ion-color-light);
+}
+
+.accordion-list{
+    margin-bottom: 4px;
+    --ion-item-background: #ffffff;
+
+    .section, .section-active{
+        --min-height:58px;
+    }
+
+   
+}
+
+.section{
+    --ion-item-background: #ffffff;
+    --ion-item-color: #000000;
+}
+
+.child-list{
+    padding:0px;
+    margin:0px;
+    .child, .child-active{
+        margin-bottom:0px;
+    }
+}
+
+.pop-over-style .popover-content {
+    top:30%!important;
+    bottom: 7%!important;
+    width: 100%!important;
+    margin-left: -2%;
+
+}

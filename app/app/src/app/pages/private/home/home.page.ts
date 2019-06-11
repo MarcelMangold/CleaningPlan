@@ -1,152 +1,178 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { ToastController, ModalController } from '@ionic/angular';
+import { AddTaskPopoverPage } from '../add-task-popover/add-task-popover.page';
+import { Storage } from '@ionic/storage';
+import { environment } from '../../../../environments/environment';
+import { LoadingController } from '@ionic/angular';
+import { LoadingService } from 'src/app/services/loading.service';
 
 
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
 })
+
+
 export class HomePage implements OnInit {
-    eventSource;
-    viewTitle;
-    currentHour;
 
-    isToday:boolean;
- 
-    calendar = {
-        mode: 'month',
-        currentDate: new Date(),
-        dateFormatter: {
-            formatMonthViewDay: function(date:Date) {
-                return date.getDate().toString();
-            },
-            formatMonthViewDayHeader: function(date:Date) {
-                return date.toLocaleString('de-DE', {  
-                    weekday: "short",
-                });               
-            },
-            formatMonthViewTitle: function(date:Date) {
-                return date.toLocaleString('de-DE', {  
-                    month: "short",
-                }); 
-            },
-            formatWeekViewDayHeader: function(date:Date) {
-                return date.toLocaleString('de-DE', {  
-                    day: "2-digit",
-                }); 
-            },
-            formatWeekViewTitle: function(date:Date) {
-                return date.toLocaleString('de-DE', {  
-                    month: "short",
-                }) + " KW"; 
-            },
-            formatWeekViewHourColumn: function(date:Date) {
-                return date.toLocaleString('de-DE', {  
-                    hour: "2-digit",
-                }); 
-            },
-            formatDayViewHourColumn: function(date:Date) {
-                return date.toLocaleString('de-DE', {  
-                    hour: "2-digit",
-                }); 
-            },
-            formatDayViewTitle: function(date:Date) {
-                return date.toLocaleString('de-DE', {  
-                    day: "2-digit",
-                }); 
-            }
-        }
-};
+    loaderToShow: any;
+    automaticClose = false;
+    user_id: number;
+    toast;
+    url = environment.url;
+    alltasks = [];
 
-    constructor(private authService: AuthService) { }
 
- 
 
-    loadEvents() {
-        this.eventSource = this.createRandomEvents();
+    constructor(protected loading: LoadingService, private loadingController: LoadingController, private authService: AuthService, private http: HttpClient, private modalController: ModalController, private storage: Storage, private toastController: ToastController) {
     }
 
-    onViewTitleChanged(title) {
-        this.viewTitle = title;
+
+    information: any[];
+
+    async ionViewWillEnter() {
+
+        this.storage.get('user_id').then((data) => { this.user_id = data });
+
+        this.http.get('assets/information.json').subscribe(async res => {
+            this.information = res['items'];
+            this.information[0].open = true;
+
+        });
+        this.getCurrentTaks();
+
     }
 
-    onEventSelected(event) {
-        console.log('Event selected:' + event.startTime + '-' + event.endTime + ',' + event.title);
+    getNextMonday() {
+        var nextMonday = new Date();
+        nextMonday.setDate(nextMonday.getDate() + (1 + 7 - nextMonday.getDay()) % 7);
+        return nextMonday;
     }
 
-    changeMode(mode) {
-        this.calendar.mode = mode;
-    }
 
-    today() {
-        this.calendar.currentDate = new Date();
-    }
 
-    onTimeSelected(ev) {
-        console.log('Selected time: ' + ev.selectedTime + ', hasEvents: ' +
-            (ev.events !== undefined && ev.events.length !== 0) + ', disabled: ' + ev.disabled);
-    }
-
-    onCurrentDateChanged(event:Date) {
-        var today = new Date();
-        today.setHours(0, 0, 0, 0);
-        event.setHours(0, 0, 0, 0);
-        this.isToday = today.getTime() === event.getTime();
-    }
-
-    createRandomEvents() {
-        var events = [];
-        for (var i = 0; i < 50; i += 1) {
-            var date = new Date();
-            var eventType = Math.floor(Math.random() * 2);
-            var startDay = Math.floor(Math.random() * 90) - 45;
-            var endDay = Math.floor(Math.random() * 2) + startDay;
-            var startTime;
-            var endTime;
-            if (eventType === 0) {
-                startTime = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + startDay));
-                if (endDay === startDay) {
-                    endDay += 1;
-                }
-                endTime = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + endDay));
-                events.push({
-                    title: 'All Day - ' + i,
-                    startTime: startTime,
-                    endTime: endTime,
-                    allDay: true
-                });
-            } else {
-                var startMinute = Math.floor(Math.random() * 24 * 60);
-                var endMinute = Math.floor(Math.random() * 180) + startMinute;
-                startTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + startDay, 0, date.getMinutes() + startMinute);
-                endTime = new Date(date.getFullYear(), date.getMonth(), date.getDate() + endDay, 0, date.getMinutes() + endMinute);
-                events.push({
-                    title: 'Event - ' + i,
-                    startTime: startTime,
-                    endTime: endTime,
-                    allDay: false
-                });
-            }
-        }
-        return events;
-    }
-
-    onRangeChanged(ev) {
-        console.log('range changed: startTime: ' + ev.startTime + ', endTime: ' + ev.endTime);
-    }
-
-    markDisabled = (date:Date) => {
-        var current = new Date();
-        current.setHours(0, 0, 0);
-        return date < current;
-};
 
     ngOnInit() {
-        let date = new Date()
-        this.currentHour = date.getHours();
     }
+
+
+    async getCurrentTaks() {
+        this.alltasks = [];
+        await this.loading.present('HomePage.ngOnInit', 'Loading messages...');
+        this.http.post(`${this.url}/api/currentTask`, { userId: this.user_id }, { observe: 'response' }).subscribe(resp => {
+            if (resp.status === 200) {
+                let thisWeekTasks;
+                let thisNextWeeksTasks;
+                let thisNextWeekTask = [];
+                let thisWeekTask = [];
+
+                let nextMonday = this.getNextMonday();
+                resp.body['tasks'].forEach(element => {
+                    if (new Date(element.finished_at) > nextMonday)
+                        thisNextWeekTask.push(element);
+                    else
+                        thisWeekTask.push(element);
+                    element.finished = false;
+
+                });
+
+                thisWeekTasks = {
+                    name: "This week",
+                    tasks: thisWeekTask
+                }
+
+                thisNextWeeksTasks = {
+                    name: "Next weeks",
+                    tasks: thisNextWeekTask
+                }
+
+                this.alltasks.push(thisWeekTasks);
+                this.alltasks.push(thisNextWeeksTasks);
+            }
+            this.loading.dismiss('HomePage.ngOnInit');
+
+        }, error => {
+            this.loading.dismiss('HomePage.ngOnInit');
+            this.showToast(error, "danger", "top");
+        });
+
+    }
+    async openAddTaskPopover() {
+        const popover = await this.modalController.create({
+            component: AddTaskPopoverPage,
+            componentProps: {
+
+            },
+            cssClass: 'pop-over-style-add-task'
+        });
+
+        popover.onDidDismiss().then((dataReturned) => {
+            if (dataReturned !== null) {
+                if (dataReturned.data != undefined) {
+                    dataReturned.data.user_id = this.user_id;
+                    this.addTaskToDatabase(dataReturned.data).then(() => {
+                        this.getCurrentTaks();
+                        this.showToast("erfolgreich", "success", "top");
+                    }
+                    )
+                        .catch(error => this.showToast(error, "danger", "top"));
+                }
+            }
+        });
+
+        return await popover.present();
+
+    }
+
+    addTaskToDatabase(task) {
+        return new Promise((resolve, reject) => {
+            this.http.post(`${this.url}/api/addTask`, task, { observe: 'response' }).subscribe(resp => {
+                if (resp.status === 200) {
+                    this.showToast("erfolgreich", "success", "top");
+                    resolve()
+                }
+
+            }, error => {
+                reject(error);
+            });
+        });
+    }
+
+
+    showToast(message, color, position) {
+        this.toast = this.toastController.create({
+            message: message,
+            duration: 2000,
+            showCloseButton: true,
+            position: position,
+            closeButtonText: 'OK',
+            color: color
+        }).then((toastData) => {
+            toastData.present();
+        });
+    }
+    HideToast() {
+        this.toast = this.toastController.dismiss();
+    }
+
+    toogleSection(index) {
+        this.alltasks[index].open = !this.alltasks[index].open;
+
+        if (this.automaticClose && this.alltasks[index].open) {
+            this.alltasks
+                .filter((item, itemIndex) => itemIndex != index)
+                .map(item => item.open = false);
+        }
+    }
+
+    tooglesSection(index, childIndex) {
+        this.alltasks[index].tasks[childIndex].open = !this.alltasks[index].tasks[childIndex].open;
+    }
+
 
 
     logout() {

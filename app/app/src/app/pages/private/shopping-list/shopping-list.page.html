@@ -1,22 +1,26 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Shopping list</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Shopping list</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button color="secondary" (click)="logout()">
+                <ion-icon slot="icon-only" name="log-out"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
- <ion-content>
-    <ion-list  *ngFor ="let item of shoppingList" >
-        <ion-item  (click)="itemCheckboxEvent(item)">
-          <ion-label >{{item.item_name}}</ion-label>
-          <ion-checkbox  [(ngModel)]="item.finished" slot="end"></ion-checkbox>
+<ion-content>
+    <ion-list *ngFor="let item of shoppingList">
+        <ion-item (click)="itemCheckboxEvent(item)">
+            <ion-label>{{item.item_name}}</ion-label>
+            <ion-checkbox [(ngModel)]="item.finished" slot="end"></ion-checkbox>
         </ion-item>
-      </ion-list>
+    </ion-list>
 
-</ion-content> 
+</ion-content>
 
 <ion-footer>
     <ion-button (click)="openAddItemPopover($event)" expand="full">
         <ion-icon name="add"></ion-icon>
     </ion-button>
 </ion-footer>
-

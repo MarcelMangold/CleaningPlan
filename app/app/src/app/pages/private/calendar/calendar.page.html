@@ -1,0 +1,52 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Calendar</ion-title>
+        <ion-buttons slot="primary">
+            <ion-button color="secondary" (click)="logout()">
+                <ion-icon slot="icon-only" name="log-out"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ 
+    <ion-toolbar color="primary">
+
+        <ion-buttons slot="start">
+            <ion-button (click)="changeMode('day')">Tag</ion-button>
+            <ion-button  (click)="changeMode('week')">Woche</ion-button>
+            <ion-button  (click)="changeMode('month')">Monat</ion-button>
+        </ion-buttons>
+        <ion-title>{{viewTitle}}</ion-title>
+        <ion-buttons slot="end">
+           <!-- <ion-button [disabled]="isToday" (click)="today()">Heutiger Tag</ion-button> -->
+            <ion-button icon-only (click)="addEvent()">
+                <ion-icon name="add-circle-outline"></ion-icon>
+            </ion-button >
+        </ion-buttons>
+    </ion-toolbar>
+
+    <ng-template #template let-selectedDate="selectedDate.events" let-noEventsLabel="noEventsLabel">
+        <ion-list  *ngFor="let event of selectedDate" no-lines class="event-list" padding>
+            <ion-item> 
+                <ion-label> {{event.title}}</ion-label>
+                <ion-button fill="clear" color="medium" (click)="showEvent(event)"><ion-icon name="resize"></ion-icon></ion-button>
+                <ion-buttons  *ngIf="event.user_id == user_id">
+                    <ion-button (click)="editEvent(event)"><ion-icon color="medium" name="create"></ion-icon></ion-button>
+                    <ion-button (click)="deleteEvent(event)"><ion-icon color="medium" name="trash"></ion-icon></ion-button>
+                </ion-buttons>      
+            </ion-item>    
+        </ion-list>
+        <ion-label *ngIf="selectedDate.length == 0">{{noEventsLabel}}</ion-label>
+      </ng-template>
+
+    <calendar [monthviewEventDetailTemplate]="template" [dateFormatter]="calendar.dateFormatter"  [eventSource]="eventSource" [calendarMode]="calendar.mode"
+     [currentDate]="calendar.currentDate" (onCurrentDateChanged)="onCurrentDateChanged($event)" allDayLabel="ganztags"  noEventsLabel="Keine Events"
+     (onRangeChanged)="reloadSource(startTime, endTime)" (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)" 
+     (onTimeSelected)="onTimeSelected($event)" showEventDetail="true" step="30" [scrollToHour]="currentHour" preserveScrollPosition=true>
+
+    </calendar>
+
+
+</ion-content>
